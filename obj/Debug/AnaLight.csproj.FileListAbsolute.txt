@@ -1,0 +1,15 @@
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\MainWindow.g.cs
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\App.g.cs
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight_MarkupCompile.cache
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight_MarkupCompile.lref
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\bin\Debug\AnaLight.exe.config
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\bin\Debug\AnaLight.exe
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\bin\Debug\AnaLight.pdb
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\MainWindow.baml
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight.g.resources
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight.Properties.Resources.resources
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight.csproj.GenerateResource.cache
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight.csproj.CoreCompileInputs.cache
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight.exe
+C:\Users\jkmbo\Documents\Doktorat\Software\AnaLight\obj\Debug\AnaLight.pdb
