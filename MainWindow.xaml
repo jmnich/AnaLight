@@ -12,7 +12,7 @@
     </Window.DataContext>
 
     <DockPanel>
-        <TabControl x:Name="mainTabControl" TabStripPlacement="Left" Background="Black" Foreground="White">
+        <TabControl x:Name="mainTabControl" TabStripPlacement="Left" Background="Black" Foreground="White" ItemsSource="{Binding Tabs}" DockPanel.Dock="Top">
             <TabControl.Resources>
                 <Style x:Key="circularButton" TargetType="Button">
                     <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -98,7 +98,7 @@
                                         <Setter TargetName="border" Property="BorderThickness" Value="3,3,0,3"/>
                                         <Setter TargetName="border" Property="BorderBrush" Value="White"/>
                                         <Setter TargetName="border" Property="Margin" Value="10,1,1,1"/>
-                                        <Setter TargetName="but" Property="Margin" Value="8,1,3,1"/>                                       
+                                        <Setter TargetName="but" Property="Margin" Value="8,1,3,1"/>
                                         <Setter TargetName="pres" Property="TextBlock.FontWeight" Value="Bold"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
@@ -107,25 +107,8 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-
-            <TabItem Header="Ae">
-                <Label Content="1" Foreground="White"/>
-            </TabItem>
-            <TabItem Header="Aee">
-                <Label Content="2" Foreground="White"/>
-            </TabItem>
-            <TabItem Header="Aeee">
-                <Label Content="3" Foreground="White"/>
-            </TabItem>
-            <TabItem Header="Aeeeeasfsdaasdfasdfadfasdf">
-                <Label Content="4" Foreground="White"/>
-            </TabItem>
-            <TabItem Header="ąćżół">
-                <Label Content="5" Foreground="White"/>
-            </TabItem>
-            <TabItem Header="Punkt ksero">
-                <Label Content="6" Foreground="White"/>
-            </TabItem>
         </TabControl>
+
+        <StatusBar DockPanel.Dock="Bottom" MinHeight="20" MaxHeight="20" VerticalAlignment="Bottom" Background="DimGray"/>
     </DockPanel>
 </Window>

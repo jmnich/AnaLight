@@ -6,22 +6,64 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using AnaLight.Commands;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.ComponentModel;
+using AnaLight.ViewModels;
 
 namespace AnaLight
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : ViewModelBase
     {
-        public ICommand NewTabCommand { get; }
+        #region Properties
 
+        private ICommand newTabCommand;
+        public ICommand NewTabCommand
+        {
+            get
+            {
+                return newTabCommand;
+            }
+
+            set
+            {
+                newTabCommand = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<TabItem> tabs;
+        public ObservableCollection<TabItem> Tabs
+        {
+            get
+            {
+                return tabs;
+            }
+
+            set
+            {
+                tabs = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion // Properties
+
+        #region Constructor
         public MainWindowViewModel()
         {
             NewTabCommand = new UniversalCommand(() => NewTab());
         }
+        #endregion // Constructor
+
+        #region PrivateMethods
 
         private void NewTab()
         {
             Debug.WriteLine("ae");
         }
+
+        #endregion // PrivateMethods
 
     }
 }
