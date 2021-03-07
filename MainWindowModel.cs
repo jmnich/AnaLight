@@ -22,6 +22,11 @@ namespace AnaLight
                 new Views.TabBaseExperiment()
             };
 
+            for(int i = 0; i < 20; i++)
+            {
+                Tabs.Add(new Views.TabBaseExperiment());
+            }
+
             MainWindowViewModel = new MainWindowViewModel
             {
                 Tabs = this.Tabs

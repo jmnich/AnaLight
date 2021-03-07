@@ -57,6 +57,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="TabBase.cs" />
+    <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\TabBaseExperiment.xaml.cs">
       <DependentUpon>TabBaseExperiment.xaml</DependentUpon>

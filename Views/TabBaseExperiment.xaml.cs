@@ -20,11 +20,11 @@ namespace AnaLight.Views
     /// </summary>
     public partial class TabBaseExperiment : TabBase
     {
-        public TabBaseExperiment() : base("Experiment")
+        public TabBaseExperiment() : base("Tab header")
         {
             InitializeComponent();
 
-            TabInfo = "Some giberrish";
+            TabInfo = "Very important information";
         }
     }
 }

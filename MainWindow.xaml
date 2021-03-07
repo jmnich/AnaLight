@@ -12,27 +12,194 @@
     </Window.DataContext>
 
     <DockPanel>
-        <!--<ListBox ItemsSource="{Binding Tabs}" DockPanel.Dock="Left" Width="100">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <TextBlock Text="{Binding TabHeaderText}" DockPanel.Dock="Left"/>
-                    </DockPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
-
         <StatusBar DockPanel.Dock="Bottom" MinHeight="20" MaxHeight="20" VerticalAlignment="Bottom" Background="DimGray"/>
-        
-        <ListView ItemsSource="{Binding Tabs}" Width="100" HorizontalAlignment="Left" IsHitTestVisible="False">
+
+        <ListView ItemsSource="{Binding Tabs}" 
+                  MinWidth="250" 
+                  MaxWidth="250" 
+                  HorizontalAlignment="Left"
+                  Background="Black"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+            <ListView.Resources>
+                
+                <Style x:Key="circularButton" TargetType="Button">
+                    <Setter Property="OverridesDefaultStyle" Value="True"/>
+                    <Setter Property="Background" Value="PeachPuff"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Ellipse Fill="{TemplateBinding Background}"/>
+                                    <Ellipse>
+                                        <Ellipse.Fill>
+                                            <RadialGradientBrush>
+                                                <GradientStop Offset="0" Color="#00000000"/>
+                                                <GradientStop Offset="0.88" Color="#00000000"/>
+                                                <GradientStop Offset="1" Color="#80000000"/>
+                                            </RadialGradientBrush>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <Ellipse Margin="10" x:Name="highlightCircle" >
+                                        <Ellipse.Fill >
+                                            <LinearGradientBrush >
+                                                <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                                <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                                <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                            </LinearGradientBrush>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Red"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="highlightCircle" Property="Fill">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+                                                    <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                                    <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                                    <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter TargetName="content" Property="RenderTransform">
+                                            <Setter.Value>
+                                                <TranslateTransform Y="0.5" X="0.5"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <SolidColorBrush x:Key="Item.MouseOver.Background" Color="Transparent"/>
+                <SolidColorBrush x:Key="Item.MouseOver.Border" Color="DimGray"/>
+                <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="Black"/>
+                <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="White"/>
+
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border x:Name="Bd" 
+                                        BorderBrush="White" 
+                                        BorderThickness="2" 
+                                        Background="Black" 
+                                        Padding="1" 
+                                        SnapsToDevicePixels="true"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="20,3,1,3">
+
+                                    <DockPanel>
+                                        <Button Content="X" 
+                                                Style="{StaticResource circularButton}" 
+                                                DockPanel.Dock="Right"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Right"
+                                                Margin="3,3"
+                                                MinWidth="20"
+                                                MaxWidth="20"
+                                                MinHeight="20"
+                                                MaxHeight="20"/>
+
+                                        <TextBlock Text="{Binding TabInfo}" 
+                                                   Foreground="White" 
+                                                   TextWrapping="Wrap" 
+                                                   DockPanel.Dock="Bottom"
+                                                   FontSize="14"/>
+
+                                        <Border BorderBrush="White" 
+                                                BorderThickness="0,0,1,1" 
+                                                DockPanel.Dock="Left"
+                                                Margin="0,0,3,1"
+                                                Padding="2">
+                                            
+                                            <TextBlock Text="{Binding TabHeaderText}" 
+                                                       Foreground="White" 
+                                                       TextWrapping="Wrap"
+                                                       FontSize="16"/>
+                                        </Border>
+                                      
+                                    </DockPanel>
+                                    
+                                    
+                                </Border>
+                                
+                                <ControlTemplate.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" Value="True"/>
+                                            <Condition Property="IsSelected" Value="False"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                                        <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+                                    </MultiTrigger>
+
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                            <Condition Property="IsSelected" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                                        <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+                                        <Setter Property="BorderThickness" TargetName="Bd" Value="2,2,0,2"/>
+                                        <Setter Property="Margin" TargetName="Bd" Value="1,3"/>
+                                    </MultiTrigger>
+                                    
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                    </Trigger>
+                                    
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Resources>
+            
+            <!--<ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseDirectlyOver" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Background" Value="Red" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
+
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                    </Style.Resources>
+                </Style>
+            </ListView.ItemContainerStyle>
+            
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <DockPanel HorizontalAlignment="Stretch">
                         <TextBlock Text="{Binding TabInfo}" DockPanel.Dock="Bottom" TextWrapping="Wrap"/>
+                        <Button Content="X" DockPanel.Dock="Right"/>
                         <TextBlock Text="{Binding TabHeaderText}" DockPanel.Dock="Left" TextWrapping="Wrap"/>
                     </DockPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
         </ListView>
 
         <Frame>

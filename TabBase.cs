@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
+using AnaLight.Commands;
+
 namespace AnaLight
 {
     public abstract class TabBase : Page, INotifyPropertyChanged
