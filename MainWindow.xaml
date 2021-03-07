@@ -12,103 +12,32 @@
     </Window.DataContext>
 
     <DockPanel>
-        <TabControl x:Name="mainTabControl" TabStripPlacement="Left" Background="Black" Foreground="White" ItemsSource="{Binding Tabs}" DockPanel.Dock="Top">
-            <TabControl.Resources>
-                <Style x:Key="circularButton" TargetType="Button">
-                    <Setter Property="OverridesDefaultStyle" Value="True"/>
-                    <Setter Property="Background" Value="PeachPuff"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Grid>
-                                    <Ellipse Fill="{TemplateBinding Background}"/>
-                                    <Ellipse>
-                                        <Ellipse.Fill>
-                                            <RadialGradientBrush>
-                                                <GradientStop Offset="0" Color="#00000000"/>
-                                                <GradientStop Offset="0.88" Color="#00000000"/>
-                                                <GradientStop Offset="1" Color="#80000000"/>
-                                            </RadialGradientBrush>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <Ellipse Margin="10" x:Name="highlightCircle" >
-                                        <Ellipse.Fill >
-                                            <LinearGradientBrush >
-                                                <GradientStop Offset="0" Color="#50FFFFFF"/>
-                                                <GradientStop Offset="0.5" Color="#00FFFFFF"/>
-                                                <GradientStop Offset="1" Color="#50FFFFFF"/>
-                                            </LinearGradientBrush>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Grid>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="Red"/>
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="highlightCircle" Property="Fill">
-                                            <Setter.Value>
-                                                <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
-                                                    <GradientStop Offset="0" Color="#50FFFFFF"/>
-                                                    <GradientStop Offset="0.5" Color="#00FFFFFF"/>
-                                                    <GradientStop Offset="1" Color="#50FFFFFF"/>
-                                                </LinearGradientBrush>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter TargetName="content" Property="RenderTransform">
-                                            <Setter.Value>
-                                                <TranslateTransform Y="0.5" X="0.5"/>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-
-                <Style TargetType="TabItem">
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="Background" Value="Black"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="TabItem">
-                                <Border x:Name="border" BorderBrush="DimGray" BorderThickness="2" Padding="5,0" Margin="1,1,1,1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Background="Black">
-                                    <DockPanel HorizontalAlignment="Stretch">
-                                        <ContentPresenter x:Name="pres" ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="100" MaxWidth="100" MinWidth="100">
-                                            <ContentPresenter.ContentTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Foreground="White" FontSize="15"/>
-                                                </DataTemplate>
-                                            </ContentPresenter.ContentTemplate>
-                                        </ContentPresenter>
-
-                                        <Border BorderThickness="1,0,0,0" BorderBrush="White" Margin="2,3">
-
-                                        </Border>
-                                        <Button x:Name="but" Content="X" VerticalAlignment="Center" Margin="5,1,0,1" Width="16" Height="16" FontSize="11" Style="{StaticResource circularButton}" HorizontalAlignment="Right" DockPanel.Dock="Right"/>
-                                    </DockPanel>
-                                </Border>
-
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <!--<Setter TargetName="border" Property="Background" Value="DimGray"/>-->
-                                        <Setter TargetName="border" Property="BorderThickness" Value="3,3,0,3"/>
-                                        <Setter TargetName="border" Property="BorderBrush" Value="White"/>
-                                        <Setter TargetName="border" Property="Margin" Value="10,1,1,1"/>
-                                        <Setter TargetName="but" Property="Margin" Value="8,1,3,1"/>
-                                        <Setter TargetName="pres" Property="TextBlock.FontWeight" Value="Bold"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
-        </TabControl>
+        <!--<ListBox ItemsSource="{Binding Tabs}" DockPanel.Dock="Left" Width="100">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock Text="{Binding TabHeaderText}" DockPanel.Dock="Left"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>-->
 
         <StatusBar DockPanel.Dock="Bottom" MinHeight="20" MaxHeight="20" VerticalAlignment="Bottom" Background="DimGray"/>
+        
+        <ListView ItemsSource="{Binding Tabs}" Width="100" HorizontalAlignment="Left" IsHitTestVisible="False">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <TextBlock Text="{Binding TabInfo}" DockPanel.Dock="Bottom" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding TabHeaderText}" DockPanel.Dock="Left" TextWrapping="Wrap"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Frame>
+            
+        </Frame>
+        
     </DockPanel>
 </Window>

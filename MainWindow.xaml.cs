@@ -20,9 +20,12 @@ namespace AnaLight
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowModel model;
+
         public MainWindow()
         {
             InitializeComponent();
+            model = new MainWindowModel(this);
         }
     }
 }

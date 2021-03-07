@@ -32,8 +32,8 @@ namespace AnaLight
             }
         }
 
-        private ObservableCollection<TabItem> tabs;
-        public ObservableCollection<TabItem> Tabs
+        private ObservableCollection<TabBase> tabs;
+        public ObservableCollection<TabBase> Tabs
         {
             get
             {

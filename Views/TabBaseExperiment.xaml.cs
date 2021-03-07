@@ -16,13 +16,15 @@ using System.Windows.Shapes;
 namespace AnaLight.Views
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for TabBaseExperiment.xaml
     /// </summary>
-    public partial class Page1 : UserControl
+    public partial class TabBaseExperiment : TabBase
     {
-        public Page1()
+        public TabBaseExperiment() : base("Experiment")
         {
             InitializeComponent();
+
+            TabInfo = "Some giberrish";
         }
     }
 }
