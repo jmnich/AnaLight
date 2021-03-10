@@ -114,13 +114,15 @@
                                                    DockPanel.Dock="Bottom"
                                                    FontSize="14"/>
 
-                                        <Border BorderBrush="White" 
+                                        <Border x:Name="bdInt" 
+                                                BorderBrush="White" 
                                                 BorderThickness="0,0,1,1" 
                                                 DockPanel.Dock="Left"
                                                 Margin="0,0,3,1"
                                                 Padding="2">
                                             
-                                            <TextBlock Text="{Binding TabHeaderText}" 
+                                            <TextBlock x:Name="txtHeader"
+                                                       Text="{Binding TabHeaderText}" 
                                                        Foreground="White" 
                                                        TextWrapping="Wrap"
                                                        FontSize="16"/>
@@ -148,6 +150,8 @@
                                         </MultiTrigger.Conditions>
                                         <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
                                         <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+                                        <Setter Property="Background" TargetName="bdInt" Value="White"/>
+                                        <Setter Property="Foreground" TargetName="txtHeader" Value="Black"/>
                                         <Setter Property="BorderThickness" TargetName="Bd" Value="2,2,0,2"/>
                                         <Setter Property="Margin" TargetName="Bd" Value="1,3"/>
                                     </MultiTrigger>
