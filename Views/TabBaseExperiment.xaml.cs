@@ -23,8 +23,6 @@ namespace AnaLight.Views
         public TabBaseExperiment() : base("Tab header")
         {
             InitializeComponent();
-
-            TabInfo = "Very important information";
         }
     }
 }

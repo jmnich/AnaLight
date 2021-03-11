@@ -71,12 +71,23 @@ namespace AnaLight
             }
         }
 
+        /// <summary>
+        /// Command invoked on the tab closing button press.
+        /// </summary>
+        public UniversalCommand CloseRequestCommand { get; }
+
         #endregion Properties
+
+        #region Events
+        public EventHandler<string> TabCloseRequest;
+        #endregion
 
         #region Constructor
         public TabBase(string header)
         {
             TabHeaderText = header;
+
+            CloseRequestCommand = new UniversalCommand(() => TabCloseRequest?.Invoke(this, TabHeaderText));
         }
         #endregion // Constructor
 

@@ -17,14 +17,21 @@ namespace AnaLight
 
         public MainWindowModel(MainWindow window)
         {
-            Tabs = new ObservableCollection<TabBase>
-            {
-                new Views.TabBaseExperiment()
-            };
+            Tabs = new ObservableCollection<TabBase>();
 
             for(int i = 0; i < 20; i++)
             {
-                Tabs.Add(new Views.TabBaseExperiment());
+                Tabs.Add(new Views.TabBaseExperiment
+                {
+                    TabHeaderText = $"Tab: {i + 1}",
+                    TabInfo = $"Index of this tab: {i}"
+                });
+            }
+
+
+            foreach(var tab in Tabs)
+            {
+                tab.TabCloseRequest += OnTabCloseRequest;
             }
 
             MainWindowViewModel = new MainWindowViewModel
@@ -34,6 +41,14 @@ namespace AnaLight
 
             MainWindow = window;
             MainWindow.DataContext = MainWindowViewModel;
+        }
+
+        public void OnTabCloseRequest(object sender, string header)
+        {
+            Debug.WriteLine($"Closing tab: {((TabBase)(sender)).TabHeaderText}");
+
+            Tabs.Remove((TabBase)sender);
+            ((TabBase)sender).TabCloseRequest -= OnTabCloseRequest;
         }
     }
 }

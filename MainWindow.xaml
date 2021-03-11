@@ -91,7 +91,7 @@
                                         BorderBrush="White" 
                                         BorderThickness="2" 
                                         Background="Black" 
-                                        Padding="1" 
+                                        Padding="0,0,1,1" 
                                         SnapsToDevicePixels="true"
                                         HorizontalAlignment="Stretch"
                                         Margin="20,3,1,3">
@@ -99,6 +99,8 @@
                                     <DockPanel>
                                         <Button Content="X" 
                                                 Style="{StaticResource circularButton}" 
+                                                Command="{Binding CloseRequestCommand}"
+                                                ToolTip="{Binding TabHeaderText}"
                                                 DockPanel.Dock="Right"
                                                 VerticalAlignment="Center"
                                                 HorizontalAlignment="Right"
@@ -112,6 +114,7 @@
                                                    Foreground="White" 
                                                    TextWrapping="Wrap" 
                                                    DockPanel.Dock="Bottom"
+                                                   Margin="2,1,1,1"
                                                    FontSize="14"/>
 
                                         <Border x:Name="bdInt" 
@@ -206,9 +209,7 @@
             </ListView.ItemTemplate>-->
         </ListView>
 
-        <Frame>
-            
-        </Frame>
+        <Frame x:Name="frame_MainTabDisplay"/>
         
     </DockPanel>
 </Window>

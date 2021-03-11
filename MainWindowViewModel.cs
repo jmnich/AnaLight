@@ -49,6 +49,10 @@ namespace AnaLight
 
         #endregion // Properties
 
+        #region Events
+        public EventHandler<TabBase> TabCloseRequest;
+        #endregion // Events
+
         #region Constructor
         public MainWindowViewModel()
         {
