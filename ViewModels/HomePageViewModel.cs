@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AnaLight.Factories;
+using AnaLight.Containers;
+using System.Collections.ObjectModel;
 
 namespace AnaLight.ViewModels
 {
@@ -31,12 +34,28 @@ namespace AnaLight.ViewModels
             }
         }
 
+        /// <summary>
+        /// A list of available device control panel types.
+        /// </summary>
+        public ObservableCollection<DeviceControlPanelInfo> AvailableControlPanels { get; }
+
         #endregion // Properties
+
+        #region MVVM Model
+        /// <summary>
+        /// MVVM Model for this VM.
+        /// </summary>
+        private Models.HomePageModel Model { get; }
+        #endregion // MVVM Model
+
 
         #region Constructor
         public HomePageViewModel()
         {
+            Model = new Models.HomePageModel();
 
+            AvailableControlPanels =
+                new ObservableCollection<DeviceControlPanelInfo>(DeviceControlPanelFactory.GetAvailableControlPanelTypes());
         }
         #endregion // Constructor
     }

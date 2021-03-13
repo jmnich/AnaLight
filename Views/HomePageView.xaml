@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:AnaLight"
       xmlns:viewModels="clr-namespace:AnaLight.ViewModels"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="800" d:DesignWidth="1200"
       Title="Home Page"
       Foreground="White"
       Background="Black">
@@ -36,7 +36,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Text="{Binding WelcomeText}" 
-                   Margin="20" 
+                   Margin="30,20,15,10" 
                    FontSize="40" 
                    Grid.Row="0"
                    Grid.Column="0"
@@ -47,6 +47,53 @@
                                   Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}"
                                   Grid.Column="2"/>
 
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              Margin="5,100,0,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Control panels" FontSize="20" HorizontalAlignment="Center"/>
+
+            <ListView     Margin="3"
+                          Background="Black"
+                          Foreground="White"
+                          Grid.Column="0"
+                          Grid.Row="1">
+
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Row="1"
+              Grid.Column="1"
+              Margin="5,100,0,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Archive panels" FontSize="20" HorizontalAlignment="Center"/>
+
+            <ListView     Margin="3"
+                          Background="Black"
+                          Foreground="White"
+                          Grid.Column="0"
+                          Grid.Row="1">
+
+            </ListView>
+        </Grid>
 
     </Grid>
 </local:TabBase>

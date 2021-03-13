@@ -57,6 +57,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
+    <Compile Include="Containers\DeviceControlPanelInfo.cs" />
+    <Compile Include="Containers\PhysicalDeviceInfo.cs" />
+    <Compile Include="Factories\DeviceControlPanelFactory.cs" />
+    <Compile Include="Factories\PhysicalDeviceInfoFactory.cs" />
+    <Compile Include="Models\HomePageModel.cs" />
     <Compile Include="TabBase.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
@@ -121,9 +126,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\analight_icon.png" />
   </ItemGroup>
