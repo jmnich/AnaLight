@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FlowDocument x:Key="HomePageFlowDocument">
+        <Paragraph TextAlignment="Center">
+            <Bold>AnaLight</Bold>
+            <Image Height="80" Width="80" Source="pack://application:,,,/Resources/analight_icon.png"/>
+        </Paragraph>
+
+        <Paragraph>
+            AnaLight is an open source program created to opearate spectroscopes of different types
+            and provide enough expandability to last till the end of my PhD ;)
+        </Paragraph>
+
+        <Paragraph>
+            The program supports:
+        </Paragraph>
+        
+        <List>
+            <ListItem>
+                <Paragraph>
+                    Interfaces for different spectrometers
+                </Paragraph>
+            </ListItem>
+
+            <ListItem>
+                <Paragraph>
+                    Powerful data archivization tools
+                </Paragraph>
+            </ListItem>
+
+            <ListItem>
+                <Paragraph>
+                    Live spectrum visualization
+                </Paragraph>
+            </ListItem>
+
+            <ListItem>
+                <Paragraph>
+                    Spectrum analysis engine
+                </Paragraph>
+            </ListItem>
+
+            <ListItem>
+                <Paragraph>
+                    Easy-to-use experiment controllers
+                </Paragraph>
+            </ListItem>
+        </List>
+        
+    </FlowDocument>
+</ResourceDictionary>

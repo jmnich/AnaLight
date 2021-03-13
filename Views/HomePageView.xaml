@@ -23,14 +23,30 @@
         </Style>-->
     </local:TabBase.Resources>
 
-    <DockPanel>
-        <!--<RichTextBox DockPanel.Dock="Right">
-            
-           
-        </RichTextBox>-->
-    
-        <TextBlock Text="{Binding WelcomeText}" Margin="20" FontSize="40" DockPanel.Dock="Top"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="{Binding WelcomeText}" 
+                   Margin="20" 
+                   FontSize="40" 
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"/>
+
+        <FlowDocumentScrollViewer Document="{StaticResource HomePageFlowDocument}"
+                                  Grid.Row="0"
+                                  Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}"
+                                  Grid.Column="2"/>
 
 
-    </DockPanel>
+    </Grid>
 </local:TabBase>
