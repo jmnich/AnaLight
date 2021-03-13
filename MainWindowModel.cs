@@ -19,6 +19,10 @@ namespace AnaLight
         {
             Tabs = new ObservableCollection<TabBase>();
 
+            var homePage = new Views.HomePageView();
+            homePage.DataContext = new ViewModels.HomePageViewModel();
+            Tabs.Add(homePage);
+
             for(int i = 0; i < 20; i++)
             {
                 var newView = new Views.TabBaseExperiment

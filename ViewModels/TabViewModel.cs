@@ -10,23 +10,6 @@ namespace AnaLight.ViewModels
 {
     public class TabViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Close tab request.
-        /// </summary>
-        private UniversalCommand closeTabCommand;
-        public UniversalCommand CloseTabCommand
-        {
-            get
-            {
-                return closeTabCommand;
-            }
-
-            private set
-            {
-                closeTabCommand = value;
-            }
-        }
-
         // TODO - delete this after experiments are done
         public String TabID { get; set; }
 

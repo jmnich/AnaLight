@@ -5,7 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AnaLight"
         mc:Ignorable="d"
-        Title="Main Window" Height="450" Width="800" Background="Black" Foreground="White">
+        Title="AnaLight" 
+        Height="800" 
+        Width="1400" 
+        Background="Black" 
+        Foreground="White"
+        WindowState="Maximized"
+        WindowStyle="SingleBorderWindow">
 
     <Window.DataContext>
         <local:MainWindowViewModel x:Name="mainWindowViewModel"/>
