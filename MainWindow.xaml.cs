@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,8 @@ namespace AnaLight
         /// </summary>
         private void list_Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Debug.WriteLine($"Selected index: {list_Tabs.SelectedIndex}");
+      
             var viewModel = (MainWindowViewModel)DataContext;
 
             if (e.AddedItems.Count > 0)
