@@ -21,11 +21,18 @@ namespace AnaLight
 
             for(int i = 0; i < 20; i++)
             {
-                Tabs.Add(new Views.TabBaseExperiment
+                var newView = new Views.TabBaseExperiment
                 {
                     TabHeaderText = $"Tab: {i + 1}",
                     TabInfo = $"Index of this tab: {i}"
-                });
+                };
+
+                newView.DataContext = new ViewModels.TabViewModel
+                {
+                    TabID = $"Tab: {i + 1}"
+                };
+
+                Tabs.Add(newView);
             }
 
 

@@ -26,5 +26,13 @@ namespace AnaLight.ViewModels
                 closeTabCommand = value;
             }
         }
+
+        // TODO - delete this after experiments are done
+        public String TabID { get; set; }
+
+        public TabViewModel()
+        {
+
+        }
     }
 }

@@ -14,15 +14,18 @@
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom" MinHeight="20" MaxHeight="20" VerticalAlignment="Bottom" Background="DimGray"/>
 
-        <ListView ItemsSource="{Binding Tabs}" 
+        <ListView x:Name="list_Tabs"
+                  ItemsSource="{Binding Tabs}" 
                   MinWidth="250" 
                   MaxWidth="250" 
                   HorizontalAlignment="Left"
                   Background="Black"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                  SelectionMode="Single"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                  SelectionChanged="list_Tabs_SelectionChanged">
 
             <ListView.Resources>
-                
+
                 <Style x:Key="circularButton" TargetType="Button">
                     <Setter Property="OverridesDefaultStyle" Value="True"/>
                     <Setter Property="Background" Value="PeachPuff"/>
@@ -123,19 +126,17 @@
                                                 DockPanel.Dock="Left"
                                                 Margin="0,0,3,1"
                                                 Padding="2">
-                                            
+
                                             <TextBlock x:Name="txtHeader"
                                                        Text="{Binding TabHeaderText}" 
                                                        Foreground="White" 
                                                        TextWrapping="Wrap"
                                                        FontSize="16"/>
                                         </Border>
-                                      
+
                                     </DockPanel>
-                                    
-                                    
                                 </Border>
-                                
+
                                 <ControlTemplate.Triggers>
                                     <MultiTrigger>
                                         <MultiTrigger.Conditions>
@@ -158,58 +159,21 @@
                                         <Setter Property="BorderThickness" TargetName="Bd" Value="2,2,0,2"/>
                                         <Setter Property="Margin" TargetName="Bd" Value="1,3"/>
                                     </MultiTrigger>
-                                    
+
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                                     </Trigger>
-                                    
+
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
             </ListView.Resources>
-            
-            <!--<ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseDirectlyOver" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                        </Trigger>
-
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                        </Trigger>
-
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="Background" Value="Red" />
-                            <Setter Property="Foreground" Value="Black" />
-                        </Trigger>
-                    </Style.Triggers>
-
-                    <Style.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
-                    </Style.Resources>
-                </Style>
-            </ListView.ItemContainerStyle>
-            
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel HorizontalAlignment="Stretch">
-                        <TextBlock Text="{Binding TabInfo}" DockPanel.Dock="Bottom" TextWrapping="Wrap"/>
-                        <Button Content="X" DockPanel.Dock="Right"/>
-                        <TextBlock Text="{Binding TabHeaderText}" DockPanel.Dock="Left" TextWrapping="Wrap"/>
-                    </DockPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>-->
         </ListView>
 
-        <Frame x:Name="frame_MainTabDisplay"/>
-        
+        <!--This is the main frame responsible for actually displaying the tabs' content-->
+        <Frame Content="{Binding SelectedTab}" NavigationUIVisibility="Hidden"/>
+
     </DockPanel>
 </Window>
