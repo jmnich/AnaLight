@@ -16,6 +16,48 @@
     </local:TabBase.DataContext>
 
     <local:TabBase.Resources>
+        <Style x:Key="DarkButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10 10"/>
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Border
+                                x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="4"/>
+
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                RecognizesAccessKey="True" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="OpacityMask" Value="#AA888888"/>
+                                <Setter Property="Margin" Value="1,0" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter TargetName="Border" Property="CornerRadius" Value="0"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:TabBase.Resources>
 
     <Grid>
@@ -71,7 +113,7 @@
 
                 <ListView.Template>
                     <ControlTemplate>
-                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="White">
+                        <Border BorderBrush="Transparent">
                             <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Disabled">
                                 <ItemsPresenter></ItemsPresenter>
                             </ScrollViewer>
@@ -113,7 +155,10 @@
 
                                             <Button Content="Open"
                                                     Grid.Column="1"
-                                                    Grid.Row="1"/>
+                                                    Grid.Row="0"
+                                                    Grid.RowSpan="2"
+                                                    VerticalAlignment="Center"
+                                                    Style="{StaticResource DarkButton}"/>
 
                                             <TextBlock Text="{Binding PanelDescription}"
                                                        TextWrapping="Wrap"
@@ -199,8 +244,10 @@
 
                 <ListView.Template>
                     <ControlTemplate>
-                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="White">
-                            <ItemsPresenter></ItemsPresenter>
+                        <Border BorderBrush="Transparent">
+                            <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Disabled">
+                                <ItemsPresenter></ItemsPresenter>
+                            </ScrollViewer>
                         </Border>
                     </ControlTemplate>
                 </ListView.Template>
