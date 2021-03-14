@@ -17,8 +17,7 @@ namespace AnaLight.Containers
             }
         }
 
+        public String DeviceDescription { get; set; }
         public PhysicalDeviceType DeviceType { get; set; }
-        public String[] SupportedInterfaces { get; set; }
-        public String[] SupportedVersions { get; set; }
     }
 }

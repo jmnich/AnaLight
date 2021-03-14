@@ -22,8 +22,7 @@ namespace AnaLight.Factories
                     return new PhysicalDeviceInfo
                     {
                         DeviceType = _type,
-                        SupportedInterfaces = new string[] { "USB", "Ethernet" },
-                        SupportedVersions = new string[] { "1.1", "1.5" }
+                        DeviceDescription = "Dummy device for UI testing. Also a very very very very very very very long description.",
                     };
 
                 default:

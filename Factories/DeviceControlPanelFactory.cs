@@ -24,6 +24,21 @@ namespace AnaLight.Factories
                     PanelDescription = "Dummy panel for debugging purposes",
                     SupportedDevices = new PhysicalDeviceInfo[]
                     {
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY)
+                    }
+                },
+                new DeviceControlPanelInfo
+                {
+                    PanelType = DeviceControlPanelType.DUMMY,
+                    PanelDescription = "Dummy panel for debugging purposes",
+                    SupportedDevices = new PhysicalDeviceInfo[]
+                    {
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
                         PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY)
                     }
                 }

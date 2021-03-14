@@ -35,7 +35,7 @@
                 Grid.Row="0"
                 BorderBrush="White"
                 BorderThickness="0,0,0,1"
-                CornerRadius="30">
+                CornerRadius="0,0,30,0">
 
             <TextBlock Text="{Binding WelcomeText}" 
                    Margin="30,20,15,10" 
@@ -60,22 +60,119 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Control panels" FontSize="20" HorizontalAlignment="Center"/>
+            <TextBlock Text="Available control panels" FontSize="20" HorizontalAlignment="Center"/>
 
             <ListView     Margin="3"
                           Background="Black"
                           Foreground="White"
                           Grid.Column="0"
-                          Grid.Row="1">
+                          Grid.Row="1"
+                          ItemsSource="{Binding AvailableControlPanels}">
 
                 <ListView.Template>
                     <ControlTemplate>
                         <Border CornerRadius="10" BorderThickness="1" BorderBrush="White">
-                            <ItemsPresenter></ItemsPresenter>
+                            <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Disabled">
+                                <ItemsPresenter></ItemsPresenter>
+                            </ScrollViewer>
                         </Border>
                     </ControlTemplate>
                 </ListView.Template>
 
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border BorderBrush="White"
+                                            BorderThickness="1,0,1,0"
+                                            Margin="10,5"
+                                            Padding="5"
+                                            CornerRadius="3">
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock Text="{Binding PanelName}"
+                                                       TextWrapping="Wrap"
+                                                       FontWeight="Bold"
+                                                       FontSize="16"
+                                                       Grid.Column="0"
+                                                       Grid.ColumnSpan="2"
+                                                       Grid.Row="0"/>
+
+                                            <Button Content="Open"
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"/>
+
+                                            <TextBlock Text="{Binding PanelDescription}"
+                                                       TextWrapping="Wrap"
+                                                       Grid.Column="0"
+                                                       Grid.Row="1"/>
+
+                                            <TextBlock Text="Supported devices:"
+                                                       Grid.Column="0"
+                                                       Grid.ColumnSpan="2"
+                                                       Grid.Row="2"
+                                                       HorizontalAlignment="Center"
+                                                       FontSize="16"
+                                                       Margin="20,5,1,1"/>
+
+                                            <ListView ItemsSource="{Binding SupportedDevices}"
+                                                      Grid.Column="0"
+                                                      Grid.ColumnSpan="2"
+                                                      Grid.Row="3"
+                                                      Margin="20,0,5,0"
+                                                      Background="Black"
+                                                      Foreground="White">
+                                                
+                                                <ListView.Template>
+                                                    <ControlTemplate>
+                                                        <Border BorderBrush="Transparent">
+                                                            <ItemsPresenter></ItemsPresenter>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </ListView.Template>
+
+                                                <ListView.Resources>
+                                                    <Style TargetType="{x:Type ListViewItem}">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                                    <StackPanel Orientation="Vertical">
+                                                                        <TextBlock Text="{Binding DeviceName}" 
+                                                                                   FontSize="14"
+                                                                                   FontWeight="DemiBold"
+                                                                                   TextWrapping="Wrap"/>
+                                                                        <TextBlock Text="{Binding DeviceDescription}"
+                                                                                   TextWrapping="Wrap"/>
+                                                                    </StackPanel>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </ListView.Resources>
+                                                
+                                            </ListView>
+                                        </Grid>
+
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
+                
             </ListView>
         </Grid>
 
