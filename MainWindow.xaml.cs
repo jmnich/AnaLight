@@ -22,14 +22,22 @@ namespace AnaLight
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainWindowModel model;
-
-        public EventHandler<TabBase> SelectedTabChanged;
+        private MainWindowModel model;
 
         public MainWindow()
         {
             InitializeComponent();
             model = new MainWindowModel(this);
+
+            /*
+             * Now it can safely be assumed that model populated the UI as it sets DataContext of this view in its
+             * constructor.
+             * This code below makes sure that Home Page is immediately presented to the user when the application starts.
+             */
+            if(list_Tabs.Items?.Count > 0)
+            {
+                list_Tabs.SelectedIndex = 0;
+            }
         }
 
         /// <summary>

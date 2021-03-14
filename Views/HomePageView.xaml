@@ -16,11 +16,6 @@
     </local:TabBase.DataContext>
 
     <local:TabBase.Resources>
-        <!--<Style TargetType="{x:Type RichTextBox}">
-            <Setter Property="Background" Value="Black"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="MaxWidth" Value="100"/>
-        </Style>-->
     </local:TabBase.Resources>
 
     <Grid>
@@ -34,14 +29,19 @@
             <RowDefinition Height="Auto" MinHeight="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <TextBlock Text="{Binding WelcomeText}" 
-                   Margin="30,20,15,10" 
-                   FontSize="40" 
-                   Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"/>
 
+        <Border Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                BorderBrush="White"
+                BorderThickness="0,0,0,1"
+                CornerRadius="30">
+
+            <TextBlock Text="{Binding WelcomeText}" 
+                   Margin="30,20,15,10" 
+                   FontSize="40"/>
+        </Border>
+        
         <FlowDocumentScrollViewer Document="{StaticResource HomePageFlowDocument}"
                                   Grid.Row="0"
                                   Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}"
@@ -68,6 +68,14 @@
                           Grid.Column="0"
                           Grid.Row="1">
 
+                <ListView.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="White">
+                            <ItemsPresenter></ItemsPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </ListView.Template>
+
             </ListView>
         </Grid>
 
@@ -91,6 +99,14 @@
                           Foreground="White"
                           Grid.Column="0"
                           Grid.Row="1">
+
+                <ListView.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="White">
+                            <ItemsPresenter></ItemsPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </ListView.Template>
 
             </ListView>
         </Grid>
