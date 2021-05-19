@@ -127,10 +127,10 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                                     <Border BorderBrush="White"
-                                            BorderThickness="1,0,1,0"
+                                            BorderThickness="1,0,0,0"
                                             Margin="10,5"
                                             Padding="5"
-                                            CornerRadius="3">
+                                            CornerRadius="15">
 
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -158,7 +158,8 @@
                                                     Grid.Row="0"
                                                     Grid.RowSpan="2"
                                                     VerticalAlignment="Center"
-                                                    Style="{StaticResource DarkButton}"/>
+                                                    Style="{StaticResource DarkButton}"
+                                                    Command="{Binding OpenPanelCommand}"/>
 
                                             <TextBlock Text="{Binding PanelDescription}"
                                                        TextWrapping="Wrap"

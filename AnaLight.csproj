@@ -57,8 +57,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
+    <Compile Include="Commands\OpenPanelCommand.cs" />
     <Compile Include="Containers\DeviceControlPanelInfo.cs" />
     <Compile Include="Containers\PhysicalDeviceInfo.cs" />
+    <Compile Include="DevicePanelRegistrator.cs" />
     <Compile Include="Factories\DeviceControlPanelFactory.cs" />
     <Compile Include="Factories\PhysicalDeviceInfoFactory.cs" />
     <Compile Include="Models\HomePageModel.cs" />

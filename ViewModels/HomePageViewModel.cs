@@ -54,8 +54,7 @@ namespace AnaLight.ViewModels
         {
             Model = new Models.HomePageModel();
 
-            AvailableControlPanels =
-                new ObservableCollection<DeviceControlPanelInfo>(DeviceControlPanelFactory.GetAvailableControlPanelTypes());
+            AvailableControlPanels = DeviceControlPanelFactory.AvailableControlPanels;
         }
         #endregion // Constructor
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using AnaLight.Factories;
 
 namespace AnaLight.Containers
@@ -20,5 +21,6 @@ namespace AnaLight.Containers
         public DeviceControlPanelType PanelType { get; set; }
         public String PanelDescription { get; set; }
         public PhysicalDeviceInfo[] SupportedDevices { get; set; }
+        public ICommand OpenPanelCommand { get; set; }
     }
 }
