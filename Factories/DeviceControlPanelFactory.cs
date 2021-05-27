@@ -15,6 +15,7 @@ namespace AnaLight.Factories
     {
         DUMMY,
         HOME,
+        BASIC_LIVE_SPECTRA,
     }
 
     public class DeviceControlPanelFactory
@@ -35,6 +36,19 @@ namespace AnaLight.Factories
         {
             NewPanelRegistrator = devicePanelRegistrator;
             AvailableControlPanels.Clear();
+
+            AvailableControlPanels.Add(
+                new DeviceControlPanelInfo
+                {
+                    OpenPanelCommand = new OpenPanelCommand(this, DeviceControlPanelType.BASIC_LIVE_SPECTRA),
+                    PanelType = DeviceControlPanelType.BASIC_LIVE_SPECTRA,
+                    PanelDescription = "Basic spectra viewer capable of interfacing with simple spectrometers " +
+                        "and scroling through raw data",
+                    SupportedDevices = new PhysicalDeviceInfo[]
+                    {
+                        PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.PROTOTYPE_ALPHA)
+                    }
+                });
 
             AvailableControlPanels.Add(
                 new DeviceControlPanelInfo
@@ -95,11 +109,26 @@ namespace AnaLight.Factories
                     {
                         view = new Views.HomePageView
                         {
+                            TabHeaderText = "Home tab",
+                            TabInfo = "",
                             DataContext = new ViewModels.HomePageViewModel()
                         };
 
                         break;
                     }
+
+                case DeviceControlPanelType.BASIC_LIVE_SPECTRA:
+                    {
+                        view = new Views.BasicLiveSpectraView
+                        {
+                            TabHeaderText = "Basic live spectra",
+                            TabInfo = "Acquisition and display of raw spectra",
+                            DataContext = new ViewModels.BasicLiveSpectraViewModel()
+                        };
+
+                        break;
+                    }
+
                 default:
                     throw new Exception("Device control panel factory: unknown panel requested");
             }
@@ -110,45 +139,20 @@ namespace AnaLight.Factories
             Debug.WriteLine($"Device control panel factory created a panel: /n/t{type}/n/tWhich is a tab number {createdTabsCounter}");
         }
 
-        //public DeviceControlPanelInfo[] GetAvailableControlPanelTypes()
-        //{
-        //    var controlPanelTypes = new DeviceControlPanelInfo[]
-        //    {
-        //        new DeviceControlPanelInfo
-        //        {
-        //            OpenPanelCommand = new OpenPanelCommand(this, DeviceControlPanelType.DUMMY),
-        //            PanelType = DeviceControlPanelType.DUMMY,
-        //            PanelDescription = "Dummy panel for debugging purposes",
-        //            SupportedDevices = new PhysicalDeviceInfo[]
-        //            {
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY)
-        //            }
-        //        },
-
-        //        new DeviceControlPanelInfo
-        //        {
-        //            OpenPanelCommand = new OpenPanelCommand(this, DeviceControlPanelType.DUMMY),
-        //            PanelType = DeviceControlPanelType.DUMMY,
-        //            PanelDescription = "Dummy panel for debugging purposes",
-        //            SupportedDevices = new PhysicalDeviceInfo[]
-        //            {
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY),
-        //                PhysicalDeviceInfoFactory.GetDeviceInfo(PhysicalDeviceType.DUMMY)
-        //            }
-        //        }
-        //    };
-
-        //    return controlPanelTypes;
-        //}
-
         public static string ConvertControlPanelTypeToString(DeviceControlPanelType _type)
         {
-            return $"Panel - {_type}";
+            switch (_type)
+            {
+                case DeviceControlPanelType.BASIC_LIVE_SPECTRA:
+                    {
+                        return "Basic live spectra";
+                    }
+
+                default:
+                    {
+                        return $"Panel - {_type}";
+                    }
+            }
         }
     }
 }

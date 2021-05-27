@@ -9,7 +9,8 @@ namespace AnaLight.Factories
 {
     public enum PhysicalDeviceType
     {
-        DUMMY
+        DUMMY,
+        PROTOTYPE_ALPHA,
     }
 
     public class PhysicalDeviceInfoFactory
@@ -25,6 +26,13 @@ namespace AnaLight.Factories
                         DeviceDescription = "Dummy device for UI testing. Also a very very very very very very very long description.",
                     };
 
+                case PhysicalDeviceType.PROTOTYPE_ALPHA:
+                    return new PhysicalDeviceInfo
+                    {
+                        DeviceType = _type,
+                        DeviceDescription = "3D printed spectrometer with a transmissive grating and refractive optics",
+                    };
+
                 default:
                     return null;
             }
@@ -36,6 +44,9 @@ namespace AnaLight.Factories
             {
                 case PhysicalDeviceType.DUMMY:
                     return "Dummy Device";
+
+                case PhysicalDeviceType.PROTOTYPE_ALPHA:
+                    return "Prototype alpha";
 
                 default:
                     return "Unknown device type";

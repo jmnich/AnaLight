@@ -56,18 +56,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Adapters\AlphaPrototypeAdapter.cs" />
+    <Compile Include="Adapters\ISerialSpectraStreamerAdapter.cs" />
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
     <Compile Include="Commands\OpenPanelCommand.cs" />
+    <Compile Include="Containers\BasicSpectraContainer.cs" />
     <Compile Include="Containers\DeviceControlPanelInfo.cs" />
     <Compile Include="Containers\PhysicalDeviceInfo.cs" />
-    <Compile Include="DevicePanelRegistrator.cs" />
+    <Compile Include="Factories\SerialSpectraStreamerFactory.cs" />
+    <Compile Include="IDevicePanelRegistrator.cs" />
     <Compile Include="Factories\DeviceControlPanelFactory.cs" />
     <Compile Include="Factories\PhysicalDeviceInfoFactory.cs" />
+    <Compile Include="Models\BasicLiveSpectraModel.cs" />
     <Compile Include="Models\HomePageModel.cs" />
     <Compile Include="TabBase.cs" />
+    <Compile Include="ViewModels\BasicLiveSpectraViewModel.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\BasicLiveSpectraView.xaml.cs">
+      <DependentUpon>BasicLiveSpectraView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePageView.xaml.cs">
       <DependentUpon>HomePageView.xaml</DependentUpon>
     </Compile>
@@ -88,6 +97,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\HomePageFlowDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BasicLiveSpectraView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

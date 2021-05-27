@@ -181,7 +181,7 @@
                                                       Margin="20,0,5,0"
                                                       Background="Black"
                                                       Foreground="White">
-                                                
+
                                                 <ListView.Template>
                                                     <ControlTemplate>
                                                         <Border BorderBrush="Transparent">
@@ -208,17 +208,14 @@
                                                         </Setter>
                                                     </Style>
                                                 </ListView.Resources>
-                                                
                                             </ListView>
                                         </Grid>
-
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                     </Style>
                 </ListView.Resources>
-                
             </ListView>
         </Grid>
 

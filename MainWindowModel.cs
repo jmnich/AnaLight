@@ -33,11 +33,6 @@ namespace AnaLight
 
             // create the home panel tab
             PanelFactory.CreatePanel(DeviceControlPanelType.HOME);
-
-            for (int i = 0; i < 3; i++)
-            {
-                PanelFactory.CreatePanel(DeviceControlPanelType.DUMMY);
-            }
         }
 
         /// <summary>
