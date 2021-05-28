@@ -3,16 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AnaLight.Adapters;
 
 namespace AnaLight.Factories
 {
+    public enum SerialStreamerAdapterType
+    {
+        PROTOTYPE_ALPHA,
+    }
+
     public class SerialSpectraStreamerFactory
     {
-        public enum SerialStreamerAdapterType
+        public static ISerialSpectraStreamerAdapter CreateSpectraStreamerAdapter(SerialStreamerAdapterType type)
         {
-            PROTOTYPE_ALPHA,
-        }
+            switch(type)
+            {
+                case SerialStreamerAdapterType.PROTOTYPE_ALPHA:
+                    {
+                        return new AlphaPrototypeAdapter();
+                    }
 
-        // TODO - create all the meat
+                default:
+                    return null;
+            }
+        }
     }
 }

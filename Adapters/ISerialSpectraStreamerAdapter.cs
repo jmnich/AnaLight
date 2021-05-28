@@ -11,7 +11,7 @@ namespace AnaLight.Adapters
     /// This interface represents a very very basic spectrometer which streams its results through a COM 
     /// port and sends new readings from time to time.
     /// </summary>
-    interface ISerialSpectraStreamerAdapter
+    public interface ISerialSpectraStreamerAdapter
     {
         void SetStreamEnabled(bool _Enbaled);
         void AttemptConnection(string _ComPort, int _Baud);
