@@ -128,6 +128,15 @@ namespace AnaLight.Adapters
                         y[i] = (double)(points[i]);
                     }
 
+                    //double[] x = new double[points.Length];
+                    //double[] y = new double[points.Length];
+
+                    //for (int i = 0; i < points.Length; i++)
+                    //{
+                    //    x[i] = (double)(i + 1);
+                    //    y[i] = (double)(points[i]);
+                    //}
+
                     BasicSpectraContainer spectra = new BasicSpectraContainer
                     {
                         XAxis = x,

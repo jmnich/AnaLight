@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      xmlns:geared="clr-namespace:LiveCharts.Geared;assembly=LiveCharts.Geared"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AnaLight"
       xmlns:viewModels="clr-namespace:AnaLight.ViewModels"
@@ -31,7 +32,22 @@
             <lvc:CartesianChart x:Name="chartSpectra" 
                                 Height="{Binding ElementName=ChartCanvas, Path=ActualHeight}" 
                                 Width="{Binding ElementName=ChartCanvas, Path=ActualWidth}" 
-                                Series="{Binding SeriesCollection}"/>
+                                DisableAnimations="True"
+                                Hoverable="False"
+                                DataTooltip="{x:Null}"
+                                Zoom="X">
+
+                <lvc:CartesianChart.Series>
+                    <geared:GLineSeries Values="{Binding ChartValues, UpdateSourceTrigger=PropertyChanged}"
+                                        Title="Hello"
+                                        StrokeThickness="3"
+                                        Stroke="White"
+                                        Fill="Transparent"
+                                        PointGeometry="{x:Null}"
+                                        LineSmoothness="0"/>
+                </lvc:CartesianChart.Series>
+                
+            </lvc:CartesianChart>
         </Canvas>
         
     </Grid>

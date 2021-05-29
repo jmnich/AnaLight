@@ -26,6 +26,18 @@ namespace AnaLight.Views
             InitializeComponent();
             chartSpectra.AxisX.Add(new Axis());
             chartSpectra.AxisY.Add(new Axis());
+
+            chartSpectra.SourceUpdated += OnValuesUpdated;
+
+            chartSpectra.AxisX[0].MinValue = 0;
+            chartSpectra.AxisX[0].MaxValue = 3694;
+            chartSpectra.AxisY[0].MinValue = 0;
+            chartSpectra.AxisY[0].MaxValue = 50000;
+        }
+
+        private void OnValuesUpdated(object source, DataTransferEventArgs e)
+        {
+            
         }
     }
 }

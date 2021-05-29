@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LiveCharts;
 using LiveCharts.Wpf;
+using LiveCharts.Geared;
 using System.Windows;
 
 namespace AnaLight.ViewModels
@@ -19,46 +20,31 @@ namespace AnaLight.ViewModels
 
         public SeriesCollection SeriesCollection { get; set; }
 
-        private int counter = 0;
-
-        private BasicSpectraContainer lastReceivedSpectrum;
-        public BasicSpectraContainer LastReceivedSpectrum
+        private GearedValues<double> chartValues;
+        public GearedValues<double> ChartValues
         {
             get
             {
-                return lastReceivedSpectrum;
+                return chartValues;
             }
 
-            private set
+            set
             {
-                lastReceivedSpectrum = value;
+                chartValues = value;
                 OnPropertyChanged();
             }
         }
 
         public BasicLiveSpectraViewModel()
         {
-            SeriesCollection = new SeriesCollection();
-            SeriesCollection.Clear();
-
             double[] dummyData = new double[100];
 
-            for(int i = 0; i < dummyData.Length; i++)
+            for (int i = 0; i < dummyData.Length; i++)
             {
                 dummyData[i] = (double)i;
             }
 
-            SeriesCollection.Add(new LineSeries
-            {
-                Title = "Waiting for data",
-                Values = new ChartValues<double>(dummyData),
-                StrokeThickness = 2,
-                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255)),
-                Fill = System.Windows.Media.Brushes.Transparent,
-                LineSmoothness = 0,
-                PointGeometry = null,
-            });
-
+            ChartValues = new GearedValues<double>(dummyData);
 
             _model = new BasicLiveSpectraModel();
             _model.NewSpectraReceived += OnNewSpectraReceived;
@@ -67,24 +53,11 @@ namespace AnaLight.ViewModels
 
         private void OnNewSpectraReceived(object sender, BasicSpectraContainer newSpectra)
         {
-            if(counter >= 50)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    LastReceivedSpectrum = newSpectra;
-
-                    var data = SeriesCollection[0] as LineSeries;
-
-                    data.Title = newSpectra.Comment;
-                    data.Values = new ChartValues<double>(newSpectra.YAxis);
-                });
-
-                counter = 0;
-            }
-            else
-            {
-                counter++;
-            }
+                ChartValues = new GearedValues<double>(newSpectra.YAxis);
+                ChartValues.WithQuality(Quality.High);
+            });
         }
     }
 }
