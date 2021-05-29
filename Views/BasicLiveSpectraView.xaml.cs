@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LiveCharts.Wpf;
 
 namespace AnaLight.Views
 {
@@ -23,6 +24,8 @@ namespace AnaLight.Views
         public BasicLiveSpectraView() : base("Basic live spectra")
         {
             InitializeComponent();
+            chartSpectra.AxisX.Add(new Axis());
+            chartSpectra.AxisY.Add(new Axis());
         }
     }
 }

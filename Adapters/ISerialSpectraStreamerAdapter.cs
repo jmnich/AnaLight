@@ -15,7 +15,7 @@ namespace AnaLight.Adapters
     {
         void SetStreamEnabled(bool _Enbaled);
         void AttemptConnection(string _ComPort, int _Baud);
-        event EventHandler<BasicSpectraContainer> OnNewSpectraAvailable;
-        event EventHandler<string> OnAdapterError;
+        event EventHandler<BasicSpectraContainer> NewSpectraAvailable;
+        event EventHandler<string> AdapterError;
     }
 }

@@ -2,7 +2,8 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AnaLight"
       xmlns:viewModels="clr-namespace:AnaLight.ViewModels"
       mc:Ignorable="d" 
@@ -14,6 +15,24 @@
     </local:TabBase.DataContext>
 
     <Grid>
-        <Label Content="Basic spectra viewer" Foreground="White"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Label Content="Basic spectra viewer" Grid.Row="0" Grid.Column="0" Foreground="White"/>
+
+        <Canvas Grid.Row="1" Grid.Column="0" Name="ChartCanvas">
+            <lvc:CartesianChart x:Name="chartSpectra" 
+                                Height="{Binding ElementName=ChartCanvas, Path=ActualHeight}" 
+                                Width="{Binding ElementName=ChartCanvas, Path=ActualWidth}" 
+                                Series="{Binding SeriesCollection}"/>
+        </Canvas>
+        
     </Grid>
 </local:TabBase>

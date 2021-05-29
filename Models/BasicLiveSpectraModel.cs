@@ -7,6 +7,7 @@ using System.Diagnostics;
 using AnaLight.Containers;
 using AnaLight.Adapters;
 using AnaLight.Factories;
+using System.Collections.ObjectModel;
 
 namespace AnaLight.Models
 {
@@ -14,18 +15,32 @@ namespace AnaLight.Models
     {
         private ISerialSpectraStreamerAdapter Adapter { get; set; }
 
+        private ObservableCollection<BasicSpectraContainer> SpectraList { get; }
+
+        public event EventHandler<BasicSpectraContainer> NewSpectraReceived;
+
         public BasicLiveSpectraModel()
         {
             Debug.WriteLine("Basic Live Spectra model created");
+            SpectraList = new ObservableCollection<BasicSpectraContainer>();
 
             Adapter = SerialSpectraStreamerFactory.CreateSpectraStreamerAdapter(SerialStreamerAdapterType.PROTOTYPE_ALPHA);
-            Adapter.OnAdapterError += OnAdapterError;
+            Adapter.AdapterError += OnAdapterError;
+            Adapter.NewSpectraAvailable += OnNewSpectraAvailable;
             Adapter.AttemptConnection("COM3", 460800);
+            Adapter.SetStreamEnabled(true);
         }
 
         private void OnAdapterError(object sender, string msg)
         {
             Debug.WriteLine($"Adapter error {msg}");
+        }
+
+        private void OnNewSpectraAvailable(object sender, BasicSpectraContainer spectra)
+        {
+            Debug.WriteLine("new spectra received");
+            SpectraList.Add(spectra);
+            NewSpectraReceived?.Invoke(this, spectra);
         }
     }
 }
