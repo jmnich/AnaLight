@@ -35,7 +35,21 @@
                                 DisableAnimations="True"
                                 Hoverable="False"
                                 DataTooltip="{x:Null}"
-                                Zoom="X">
+                                Zoom="None">
+
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Pixel"
+                              MinRange="0"
+                              MaxRange="3694"/>
+                </lvc:CartesianChart.AxisX>
+
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Counts"
+                              MinRange="0"
+                              MaxRange="45000"
+                              MinValue="0"
+                              MaxValue="45000"/>
+                </lvc:CartesianChart.AxisY>
 
                 <lvc:CartesianChart.Series>
                     <geared:GLineSeries Values="{Binding ChartValues, UpdateSourceTrigger=PropertyChanged}"

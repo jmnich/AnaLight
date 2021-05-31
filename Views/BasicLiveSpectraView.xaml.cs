@@ -24,20 +24,10 @@ namespace AnaLight.Views
         public BasicLiveSpectraView() : base("Basic live spectra")
         {
             InitializeComponent();
-            chartSpectra.AxisX.Add(new Axis());
-            chartSpectra.AxisY.Add(new Axis());
 
-            chartSpectra.SourceUpdated += OnValuesUpdated;
-
-            chartSpectra.AxisX[0].MinValue = 0;
-            chartSpectra.AxisX[0].MaxValue = 3694;
-            chartSpectra.AxisY[0].MinValue = 0;
-            chartSpectra.AxisY[0].MaxValue = 50000;
-        }
-
-        private void OnValuesUpdated(object source, DataTransferEventArgs e)
-        {
-            
+            chartSpectra.AxisX[0].Separator.Step = 100;
+            chartSpectra.AxisX[0].Separator.StrokeThickness = 1;
+            chartSpectra.AxisX[0].Separator.Stroke = Brushes.DimGray;
         }
     }
 }

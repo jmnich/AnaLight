@@ -11,6 +11,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using LiveCharts.Geared;
 using System.Windows;
+using LiveCharts.Defaults;
 
 namespace AnaLight.ViewModels
 {
@@ -18,10 +19,8 @@ namespace AnaLight.ViewModels
     {
         private readonly BasicLiveSpectraModel _model;
 
-        public SeriesCollection SeriesCollection { get; set; }
-
-        private GearedValues<double> chartValues;
-        public GearedValues<double> ChartValues
+        private GearedValues<ObservablePoint> chartValues;
+        public GearedValues<ObservablePoint> ChartValues
         {
             get
             {
@@ -37,26 +36,27 @@ namespace AnaLight.ViewModels
 
         public BasicLiveSpectraViewModel()
         {
-            double[] dummyData = new double[100];
-
-            for (int i = 0; i < dummyData.Length; i++)
-            {
-                dummyData[i] = (double)i;
-            }
-
-            ChartValues = new GearedValues<double>(dummyData);
+            ChartValues = new GearedValues<ObservablePoint>();
+            ChartValues.WithQuality(Quality.Medium);
 
             _model = new BasicLiveSpectraModel();
             _model.NewSpectraReceived += OnNewSpectraReceived;
-
         }
 
         private void OnNewSpectraReceived(object sender, BasicSpectraContainer newSpectra)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                ChartValues = new GearedValues<double>(newSpectra.YAxis);
-                ChartValues.WithQuality(Quality.High);
+                while(ChartValues.Count < newSpectra.YAxis.Length)
+                {
+                    ChartValues.Add(new ObservablePoint());
+                }
+
+                for (int i = 0; i < ChartValues.Count; i++)
+                {
+                    ChartValues[i].X = newSpectra.XAxis[i];
+                    ChartValues[i].Y = newSpectra.YAxis[i];
+                }
             });
         }
     }
