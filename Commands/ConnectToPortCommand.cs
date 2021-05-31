@@ -7,13 +7,13 @@ using System.Windows.Input;
 
 namespace AnaLight.Commands
 {
-    public class UniversalCommand : ICommand
+    public class ConnectToPortCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
-        public delegate void BasicHandler();
-        
-        public BasicHandler Handler { get; }
+        public delegate void COMConnectionHandler(string COM);
+
+        public COMConnectionHandler Handler { get; }
 
         private bool canExecuteProperty;
         public bool CanExecuteProperty
@@ -29,7 +29,7 @@ namespace AnaLight.Commands
             }
         }
 
-        public UniversalCommand(BasicHandler aHandler)
+        public ConnectToPortCommand(COMConnectionHandler aHandler)
         {
             Handler = aHandler;
             CanExecuteProperty = true;
@@ -42,7 +42,7 @@ namespace AnaLight.Commands
 
         public void Execute(object parameter)
         {
-            Handler?.Invoke();
+            Handler?.Invoke((parameter as string) ?? String.Empty);
         }
     }
 }

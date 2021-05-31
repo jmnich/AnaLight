@@ -17,16 +17,41 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Margin" Value="1"/>
+            </Style>
+
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+
+        </Grid.Resources>
         
-        <Label Content="Basic spectra viewer" Grid.Row="0" Grid.Column="0" Foreground="White"/>
+        <StackPanel Grid.Row="0" Grid.Column="0"
+                    Orientation="Vertical"
+                    Margin="5,5,5,5">
+
+            <Label Content="Select COM port"/>
+
+            <ComboBox x:Name="ComPortsCombo"
+                      ItemsSource="{Binding Ports}"
+                      HorizontalAlignment="Left"
+                      MinWidth="100"
+                      MaxWidth="400"/>
+
+        </StackPanel>
 
         <Canvas Grid.Row="1" Grid.Column="0" Name="ChartCanvas">
             <lvc:CartesianChart x:Name="chartSpectra" 

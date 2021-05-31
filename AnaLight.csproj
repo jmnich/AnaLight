@@ -68,6 +68,7 @@
     <Compile Include="Adapters\AlphaPrototypeAdapter.cs" />
     <Compile Include="Adapters\ISerialSpectraStreamerAdapter.cs" />
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
+    <Compile Include="Commands\ConnectToPortCommand.cs" />
     <Compile Include="Commands\OpenPanelCommand.cs" />
     <Compile Include="Containers\BasicSpectraContainer.cs" />
     <Compile Include="Containers\DeviceControlPanelInfo.cs" />

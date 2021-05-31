@@ -8,6 +8,7 @@ using AnaLight.Containers;
 using AnaLight.Adapters;
 using AnaLight.Factories;
 using System.Collections.ObjectModel;
+using System.IO.Ports;
 
 namespace AnaLight.Models
 {
@@ -41,6 +42,11 @@ namespace AnaLight.Models
             Debug.WriteLine("new spectra received");
             SpectraList.Add(spectra);
             NewSpectraReceived?.Invoke(this, spectra);
+        }
+
+        public string[] GetListOfAvailableCOMPorts()
+        {
+            return SerialPort.GetPortNames(); 
         }
     }
 }
