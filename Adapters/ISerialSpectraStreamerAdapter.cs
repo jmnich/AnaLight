@@ -13,8 +13,11 @@ namespace AnaLight.Adapters
     /// </summary>
     public interface ISerialSpectraStreamerAdapter
     {
+        bool IsConnected { get; }
+
         void SetStreamEnabled(bool _Enbaled);
         void AttemptConnection(string _ComPort, int _Baud);
+        void Disconnect();
         event EventHandler<BasicSpectraContainer> NewSpectraAvailable;
         event EventHandler<string> AdapterError;
     }

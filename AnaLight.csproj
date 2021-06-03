@@ -87,6 +87,7 @@
     <Compile Include="Views\BasicLiveSpectraView.xaml.cs">
       <DependentUpon>BasicLiveSpectraView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\FreezeButtonContentConverter.cs" />
     <Compile Include="Views\HomePageView.xaml.cs">
       <DependentUpon>HomePageView.xaml</DependentUpon>
     </Compile>

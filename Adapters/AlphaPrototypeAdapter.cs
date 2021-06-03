@@ -16,15 +16,19 @@ namespace AnaLight.Adapters
         public event EventHandler<BasicSpectraContainer> NewSpectraAvailable;
         public event EventHandler<string> AdapterError;
 
-        //private BackgroundWorker WorkerThread { get; set; }
         private bool ContinueReceiving { get; set; }
 
-        private bool IsConnected { get; set; }
+        public bool IsConnected
+        {
+            get
+            {
+                return _serialPort?.IsOpen ?? false;
+            }
+        }
 
         private byte[] singleFrameBuffer;
 
-        private DateTime portOpenTimestamp;
-        private DateTime lastDataPacketTimeStamp;
+        private DateTime _lastDataPacketTimeStamp;
 
         private readonly int singleFrameBytes = 3694 * 2;
 
@@ -42,13 +46,18 @@ namespace AnaLight.Adapters
 
         private SerialPort _serialPort;
 
-        public void AttemptConnection(string _ComPort, int _Baud)
+        public void AttemptConnection(string comPort, int baud)
         {
+            if(IsConnected)
+            {
+                _serialPort.Close();
+            }
+
             try
             {
                 _serialPort = new SerialPort();
-                _serialPort.PortName = _ComPort;
-                _serialPort.BaudRate = _Baud;
+                _serialPort.PortName = comPort;
+                _serialPort.BaudRate = baud;
                 _serialPort.Parity = Parity.None;
                 _serialPort.DataBits = 8;
                 _serialPort.StopBits = StopBits.One;
@@ -60,8 +69,7 @@ namespace AnaLight.Adapters
                 _serialPort.DtrEnable = true;
                 _serialPort.DataReceived += OnDataReceived;
 
-                portOpenTimestamp = DateTime.Now;
-                lastDataPacketTimeStamp = DateTime.Now;
+                _lastDataPacketTimeStamp = DateTime.Now;
 
                 _serialPort.Open();
             }
@@ -69,6 +77,14 @@ namespace AnaLight.Adapters
             {
                 // failed to connect
                 AdapterError?.Invoke(this, "Failed to connect");
+            }
+        }
+
+        public void Disconnect()
+        {
+            if (IsConnected)
+            {
+                _serialPort?.Close();
             }
         }
 
@@ -85,7 +101,7 @@ namespace AnaLight.Adapters
 
             // verify delay from the previous packet 
             if ((singleFrameBuffer.Length != 0) && 
-                ((DateTime.Now - lastDataPacketTimeStamp).TotalMilliseconds >= maximumPacketDelay))
+                ((DateTime.Now - _lastDataPacketTimeStamp).TotalMilliseconds >= maximumPacketDelay))
             {
                 // delay breached 
                 Debug.WriteLine("> Buffer content dropped due to maximum delay breach");
@@ -93,9 +109,8 @@ namespace AnaLight.Adapters
             }
 
             // handle received packet
-            lastDataPacketTimeStamp = DateTime.Now;
+            _lastDataPacketTimeStamp = DateTime.Now;
             singleFrameBuffer = singleFrameBuffer.Concat(buf).ToArray();
-            //Debug.WriteLine($"Time: {(DateTime.Now - portOpenTimestamp).TotalMilliseconds}\tAdded {buf.Length} bytes to buffer so now it is {singleFrameBuffer.Length} bytes long");
 
             if (singleFrameBuffer.Length > singleFrameBytes)
             {
@@ -113,7 +128,6 @@ namespace AnaLight.Adapters
                     points[i] = BitConverter.ToUInt16(singleFrameBuffer, i * 2);
                 }
 
-                //Debug.WriteLine($">>> Purging {singleFrameBuffer.Length} bytes from buffer");
                 singleFrameBuffer = new byte[0];
 
                 // if receiving is enabled then parse and fire an event
@@ -127,15 +141,6 @@ namespace AnaLight.Adapters
                         x[i] = (double)(i + 1);
                         y[i] = (double)(points[i]);
                     }
-
-                    //double[] x = new double[points.Length];
-                    //double[] y = new double[points.Length];
-
-                    //for (int i = 0; i < points.Length; i++)
-                    //{
-                    //    x[i] = (double)(i + 1);
-                    //    y[i] = (double)(points[i]);
-                    //}
 
                     BasicSpectraContainer spectra = new BasicSpectraContainer
                     {

@@ -20,12 +20,50 @@ namespace AnaLight.ViewModels
 {
     public class BasicLiveSpectraViewModel : TabViewModel
     {
-        private readonly BasicLiveSpectraModel _model;
+        #region Properties with INotify interface
 
-        public ObservableCollection<string> Ports { get; }
+        private bool _comSelectionComboEnabled;
+        public bool COMSelectionComboEnabled
+        {
+            set
+            {
+                _comSelectionComboEnabled = value;
+                DisconnectButtonEnabled = !value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _comSelectionComboEnabled;
+            }
+        }
 
-        public UniversalCommand RefreshPortsCommand { get; }
-        public ConnectToPortCommand ConnectToCOMCommand { get; }
+        private bool _disconnectButtonEnabled;
+        public bool DisconnectButtonEnabled
+        {
+            set
+            {
+                _disconnectButtonEnabled = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _disconnectButtonEnabled;
+            }
+        }
+
+        private bool _acquisitionFrozen;
+        public bool AcquisitionFrozen
+        {
+            set
+            {
+                _acquisitionFrozen = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _acquisitionFrozen;
+            }
+        }
 
         private GearedValues<ObservablePoint> chartValues;
         public GearedValues<ObservablePoint> ChartValues
@@ -41,6 +79,17 @@ namespace AnaLight.ViewModels
                 OnPropertyChanged();
             }
         }
+        #endregion // Properties with INotify interface
+
+
+        private readonly BasicLiveSpectraModel _model;
+
+        public ObservableCollection<string> Ports { get; }
+
+        public UniversalCommand RefreshPortsCommand { get; }
+        public ConnectToPortCommand ConnectToCOMCommand { get; }
+        public UniversalCommand DisconnectPortCommand { get; }
+        public UniversalCommand FreezeStreamSwitchCommand { get; }
 
         public BasicLiveSpectraViewModel()
         {
@@ -49,11 +98,17 @@ namespace AnaLight.ViewModels
 
             _model = new BasicLiveSpectraModel();
             _model.NewSpectraReceived += OnNewSpectraReceived;
+            _model.PortConnected += OnConnectedToPort;
+            _model.PortDisconnected += OnDisconnectedFromPort;
 
             RefreshPortsCommand = new UniversalCommand(OnRefreshPortsCommand);
             ConnectToCOMCommand = new ConnectToPortCommand(OnConnectToCOMCommand);
+            DisconnectPortCommand = new UniversalCommand(OnDisconnectPortCommand);
+            FreezeStreamSwitchCommand = new UniversalCommand(OnAcquisitionFreezeSwitchCommand);
 
             Ports = new ObservableCollection<string>();
+
+            COMSelectionComboEnabled = true;
         }
 
         private void OnNewSpectraReceived(object sender, BasicSpectraContainer newSpectra)
@@ -91,9 +146,31 @@ namespace AnaLight.ViewModels
             }
         }
 
+        private void OnAcquisitionFreezeSwitchCommand()
+        {
+            AcquisitionFrozen = !AcquisitionFrozen;
+            _model.SetSpectraStreamEnabled(!AcquisitionFrozen);
+        }
+
+        private void OnDisconnectPortCommand()
+        {
+            _model.Disconnect();
+        }
+
         private void OnConnectToCOMCommand(string port)
         {
-            Debug.WriteLine($"Connection to {port} requested");
+            _model.TryConnect(port);
+        }
+
+        private void OnConnectedToPort(object sender, string port)
+        {
+            COMSelectionComboEnabled = false;
+        }
+
+        private void OnDisconnectedFromPort(object sender, object arg)
+        {
+            COMSelectionComboEnabled = true;
+            AcquisitionFrozen = false;
         }
     }
 }

@@ -18,7 +18,11 @@ namespace AnaLight.Models
 
         private ObservableCollection<BasicSpectraContainer> SpectraList { get; }
 
+        private readonly int _alphaPrototypeBaud = 460800;
+
         public event EventHandler<BasicSpectraContainer> NewSpectraReceived;
+        public event EventHandler<string> PortConnected;
+        public event EventHandler PortDisconnected;
 
         public BasicLiveSpectraModel()
         {
@@ -28,8 +32,6 @@ namespace AnaLight.Models
             Adapter = SerialSpectraStreamerFactory.CreateSpectraStreamerAdapter(SerialStreamerAdapterType.PROTOTYPE_ALPHA);
             Adapter.AdapterError += OnAdapterError;
             Adapter.NewSpectraAvailable += OnNewSpectraAvailable;
-            Adapter.AttemptConnection("COM3", 460800);
-            Adapter.SetStreamEnabled(true);
         }
 
         private void OnAdapterError(object sender, string msg)
@@ -47,6 +49,42 @@ namespace AnaLight.Models
         public string[] GetListOfAvailableCOMPorts()
         {
             return SerialPort.GetPortNames(); 
+        }
+
+        public void TryConnect(string comPort)
+        {
+            if(SerialPort.GetPortNames().Contains(comPort))
+            {
+                Adapter.AttemptConnection(comPort, _alphaPrototypeBaud);
+
+                if(Adapter.IsConnected)
+                {
+                    Adapter.SetStreamEnabled(true);
+                    PortConnected?.Invoke(this, comPort);
+                }
+            }
+        }
+
+        public void Disconnect()
+        {
+            if(Adapter.IsConnected)
+            {
+                Adapter.Disconnect();
+
+                if(!Adapter.IsConnected)
+                {
+                    Adapter.SetStreamEnabled(false);
+                    PortDisconnected?.Invoke(this, null);
+                }
+            }
+        }
+
+        public void SetSpectraStreamEnabled(bool isEnabled)
+        {
+            if(Adapter.IsConnected)
+            {
+                Adapter.SetStreamEnabled(isEnabled);
+            }
         }
     }
 }

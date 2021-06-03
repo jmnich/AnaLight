@@ -7,6 +7,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AnaLight"
       xmlns:viewModels="clr-namespace:AnaLight.ViewModels"
+      xmlns:converters="clr-namespace:AnaLight.Views.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BasicLiveSpectraView">
@@ -22,12 +23,17 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="{x:Type Label}">
+            <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="20"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="Margin" Value="1"/>
@@ -37,23 +43,87 @@
                 <Setter Property="FontSize" Value="20"/>
             </Style>
 
+            <!--<Style TargetType="{x:Type Button}">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Background" Value="Black"/>
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="Red"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>-->
+
+            <Style TargetType="{x:Type Button}" 
+                   x:Key="RunStopButtonStyle"
+                   BasedOn="{StaticResource DarkButton}">
+
+                <Style.Triggers>
+                    <Trigger Property="Content" Value="Run">
+                        <Setter Property="Background" Value="DarkRed"/>
+                    </Trigger>
+
+                    <Trigger Property="Content" Value="Stop">
+                        <Setter Property="Background" Value="DarkGreen"/>
+                    </Trigger>
+                </Style.Triggers>
+                
+            </Style>
+
+            <converters:FreezeButtonContentConverter x:Key="freezeButtonContentConverter"/>
+
         </Grid.Resources>
-        
-        <StackPanel Grid.Row="0" Grid.Column="0"
-                    Orientation="Vertical"
-                    Margin="5,5,5,5">
 
-            <Label Content="Select COM port"/>
+        <WrapPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6"
+                   Orientation="Horizontal">
 
-            <ComboBox x:Name="ComPortsCombo"
+            <StackPanel Orientation="Vertical"
+                        Margin="5,5,5,5">
+
+                <TextBlock Text="Select COM port"
+                       TextWrapping="Wrap"/>
+
+                <ComboBox x:Name="ComPortsCombo"
                       ItemsSource="{Binding Ports}"
+                      IsEnabled="{Binding COMSelectionComboEnabled}"
                       HorizontalAlignment="Left"
-                      MinWidth="100"
-                      MaxWidth="400"/>
+                      MinWidth="100"/>
+            </StackPanel>
 
-        </StackPanel>
+            <Button x:Name="BtnDisconnect"
+                    Content="Disconnect"
+                    Style="{StaticResource DarkButton}"
+                    MaxWidth="150"
+                    MaxHeight="60"
+                    FontSize="20"
+                    Margin="5"
+                    IsEnabled="{Binding DisconnectButtonEnabled}"
+                    Command="{Binding DisconnectPortCommand}"/>
 
-        <Canvas Grid.Row="1" Grid.Column="0" Name="ChartCanvas">
+            <Button x:Name="BtnFreeze"
+                    Content="{Binding AcquisitionFrozen, Converter={StaticResource freezeButtonContentConverter}}"
+                    Style="{StaticResource RunStopButtonStyle}"
+                    MaxWidth="150"
+                    MaxHeight="60"
+                    FontSize="20"
+                    Margin="5"
+                    IsEnabled="{Binding DisconnectButtonEnabled}"
+                    Command="{Binding FreezeStreamSwitchCommand}">
+                
+                <!--<Style BasedOn="{StaticResource DarkButton}">
+                    <Style.Triggers>
+                        <Trigger Property="Content" Value="Stop">
+                            
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>-->
+
+
+            </Button>
+
+        </WrapPanel>
+
+        <Canvas Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Name="ChartCanvas">
             <lvc:CartesianChart x:Name="chartSpectra" 
                                 Height="{Binding ElementName=ChartCanvas, Path=ActualHeight}" 
                                 Width="{Binding ElementName=ChartCanvas, Path=ActualWidth}" 

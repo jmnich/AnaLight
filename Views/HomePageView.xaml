@@ -16,7 +16,7 @@
     </local:TabBase.DataContext>
 
     <local:TabBase.Resources>
-        <Style x:Key="DarkButton" TargetType="{x:Type Button}">
+        <!--<Style x:Key="DarkButton" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="Black"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -57,7 +57,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </local:TabBase.Resources>
 
     <Grid>
