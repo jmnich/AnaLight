@@ -14,11 +14,16 @@ namespace AnaLight.Adapters
     public interface ISerialSpectraStreamerAdapter
     {
         bool IsConnected { get; }
+        double[] SupportedFrequencies { get; }
 
-        void SetStreamEnabled(bool _Enbaled);
-        void AttemptConnection(string _ComPort, int _Baud);
-        void Disconnect();
         event EventHandler<BasicSpectraContainer> NewSpectraAvailable;
         event EventHandler<string> AdapterError;
+
+        int[] SupportedShutterSettingsForFrequency(double frequency);
+        void TransmitConfigurationCommand(double frequency, int shutterSetting);
+        void SetStreamEnabled(bool enabled);
+        void AttemptConnection(string comPort, int baud);
+        void Disconnect();
+
     }
 }

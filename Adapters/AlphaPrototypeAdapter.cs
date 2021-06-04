@@ -26,6 +26,14 @@ namespace AnaLight.Adapters
             }
         }
 
+        public double[] SupportedFrequencies
+        {
+            get
+            {
+                return new double[] { 2.0, 1.0, 0.5, 0.2, 0.1, 0.033, 0.017 };
+            }
+        }
+
         private byte[] singleFrameBuffer;
 
         private DateTime _lastDataPacketTimeStamp;
@@ -45,6 +53,35 @@ namespace AnaLight.Adapters
         }
 
         private SerialPort _serialPort;
+
+        /// <summary>
+        /// Get shutter settings available for the selected frequency.
+        /// </summary>
+        /// <param name="frequency">One of the fixed frequencies</param>
+        /// <returns>an array of available shutter settings</returns>
+        public int[] SupportedShutterSettingsForFrequency(double frequency)
+        {
+            switch (frequency)
+            {
+                case 2.0:
+                case 1.0:
+                case 0.5:
+                    {
+                        return new int[] { 1, 2, 5, 10, 50, 100 };
+                    }
+
+                case 0.2:
+                case 0.1:
+                case 0.033:
+                case 0.017:
+                    {
+                        return new int[] { 1, 2, 5, 10 };
+                    }
+
+                default:
+                    return new int[0];
+            }
+        }
 
         public void AttemptConnection(string comPort, int baud)
         {
@@ -91,6 +128,18 @@ namespace AnaLight.Adapters
         public void SetStreamEnabled(bool _Enbaled)
         {
             ContinueReceiving = _Enbaled;
+        }
+
+        public void TransmitConfigurationCommand(double frequency, int shutterSetting)
+        {
+            if(SupportedFrequencies.Contains(frequency) && SupportedShutterSettingsForFrequency(frequency).Contains(shutterSetting))
+            {
+                Debug.WriteLine($"Configuration command requested\t\tf={frequency}   sh={shutterSetting}");
+            }
+            else
+            {
+                Debug.WriteLine("Incorrect configuration requested");
+            }
         }
 
         private void OnDataReceived(object sender, SerialDataReceivedEventArgs e)

@@ -43,27 +43,16 @@
                 <Setter Property="FontSize" Value="20"/>
             </Style>
 
-            <!--<Style TargetType="{x:Type Button}">
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Background" Value="Black"/>
-
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="Red"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>-->
-
             <Style TargetType="{x:Type Button}" 
                    x:Key="RunStopButtonStyle"
                    BasedOn="{StaticResource DarkButton}">
 
                 <Style.Triggers>
-                    <Trigger Property="Content" Value="Run">
+                    <Trigger Property="Content" Value="Stopped">
                         <Setter Property="Background" Value="DarkRed"/>
                     </Trigger>
 
-                    <Trigger Property="Content" Value="Stop">
+                    <Trigger Property="Content" Value="Running">
                         <Setter Property="Background" Value="DarkGreen"/>
                     </Trigger>
                 </Style.Triggers>
@@ -106,22 +95,82 @@
                     MaxWidth="150"
                     MaxHeight="60"
                     FontSize="20"
-                    Margin="5"
+                    Margin="20,5,5,5"
                     IsEnabled="{Binding DisconnectButtonEnabled}"
-                    Command="{Binding FreezeStreamSwitchCommand}">
-                
-                <!--<Style BasedOn="{StaticResource DarkButton}">
-                    <Style.Triggers>
-                        <Trigger Property="Content" Value="Stop">
-                            
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>-->
-
-
-            </Button>
-
+                    Command="{Binding FreezeStreamSwitchCommand}"/>
+            
         </WrapPanel>
+
+        <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="6"
+                   Orientation="Vertical">
+
+            <TextBlock Text="Acquisition config." 
+                       TextWrapping="Wrap"
+                       Foreground="DarkGreen"
+                       FontSize="18"
+                       Margin="5,15,5,5"/>
+
+            <Border Background="Transparent"
+                    BorderThickness="1"
+                    BorderBrush="DarkGreen"
+                    CornerRadius="5"
+                    Margin="5,5">
+
+                <StackPanel Orientation="Vertical">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="Freq."
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   TextWrapping="Wrap"
+                                   Foreground="DarkGreen"
+                                   FontSize="18"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                   Text="Sh."
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   TextWrapping="Wrap"
+                                   Foreground="DarkGreen"
+                                   FontSize="18"/>
+
+                        <ComboBox Grid.Row="0" Grid.Column="1"
+                                  x:Name="FrequencyCombo"
+                                  HorizontalAlignment="Stretch"
+                                  Margin="10,5,5,0"/>
+
+                        <ComboBox Grid.Row="1" Grid.Column="1"
+                                  x:Name="ShutterCombo"
+                                  HorizontalAlignment="Stretch"
+                                  Margin="10,5,5,5"/>
+
+                    </Grid>
+                    
+                    <Button x:Name="BtnConfigure"
+                    Content="Configure"
+                    Style="{StaticResource DarkButton}"
+                    MaxWidth="150"
+                    MaxHeight="60"
+                    FontSize="20"
+                    Margin="5"
+                    IsEnabled="{Binding DisconnectButtonEnabled}"/>
+
+                </StackPanel>
+                
+            </Border>
+            
+        </StackPanel>
 
         <Canvas Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Name="ChartCanvas">
             <lvc:CartesianChart x:Name="chartSpectra" 

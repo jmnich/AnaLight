@@ -16,11 +16,11 @@ namespace AnaLight.Views.Converters
             
             if(val)
             {
-                return "Run";
+                return "Stopped";
             }
             else
             {
-                return "Stop";
+                return "Running";
             }
         }
 
@@ -28,7 +28,7 @@ namespace AnaLight.Views.Converters
         {
             string val = (string)value;
 
-            if(val.Equals("Run"))
+            if(val.Equals("Stopped"))
             {
                 return true;
             }
