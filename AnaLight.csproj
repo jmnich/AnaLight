@@ -70,6 +70,7 @@
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
     <Compile Include="Commands\ConnectToPortCommand.cs" />
     <Compile Include="Commands\OpenPanelCommand.cs" />
+    <Compile Include="Commands\RefreshShutterSettingsCommand.cs" />
     <Compile Include="Containers\BasicSpectraContainer.cs" />
     <Compile Include="Containers\DeviceControlPanelInfo.cs" />
     <Compile Include="Containers\PhysicalDeviceInfo.cs" />

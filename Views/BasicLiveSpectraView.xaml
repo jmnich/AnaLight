@@ -33,7 +33,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="{x:Type TextBlock}">
+            <Style TargetType="{x:Type TextBlock}" x:Key="DarkTextBlock">
                 <Setter Property="FontSize" Value="20"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="Margin" Value="1"/>
@@ -41,6 +41,7 @@
 
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Foreground" Value="Black"/>
             </Style>
 
             <Style TargetType="{x:Type Button}" 
@@ -70,7 +71,8 @@
                         Margin="5,5,5,5">
 
                 <TextBlock Text="Select COM port"
-                       TextWrapping="Wrap"/>
+                           TextWrapping="Wrap"
+                           Style="{StaticResource DarkTextBlock}"/>
 
                 <ComboBox x:Name="ComPortsCombo"
                       ItemsSource="{Binding Ports}"
@@ -105,6 +107,7 @@
                    Orientation="Vertical">
 
             <TextBlock Text="Acquisition config." 
+                       Style="{StaticResource DarkTextBlock}"
                        TextWrapping="Wrap"
                        Foreground="DarkGreen"
                        FontSize="18"
@@ -130,6 +133,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Style="{StaticResource DarkTextBlock}"
                                    Text="Freq."
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
@@ -138,6 +142,7 @@
                                    FontSize="18"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0"
+                                   Style="{StaticResource DarkTextBlock}"
                                    Text="Sh."
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
@@ -147,24 +152,44 @@
 
                         <ComboBox Grid.Row="0" Grid.Column="1"
                                   x:Name="FrequencyCombo"
+                                  ItemsSource="{Binding FrequencySettings}"
                                   HorizontalAlignment="Stretch"
                                   Margin="10,5,5,0"/>
 
                         <ComboBox Grid.Row="1" Grid.Column="1"
                                   x:Name="ShutterCombo"
+                                  ItemsSource="{Binding ShutterSettings}"
                                   HorizontalAlignment="Stretch"
                                   Margin="10,5,5,5"/>
 
                     </Grid>
-                    
+
+                    <TextBlock x:Name="periodTextBlock"
+                               Style="{StaticResource DarkTextBlock}"
+                               Text="-"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               TextWrapping="Wrap"
+                               FontSize="18"
+                               Margin="5"/>
+
+                    <TextBlock x:Name="exposureTextBlock"
+                               Style="{StaticResource DarkTextBlock}"
+                               Text="-"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               TextWrapping="Wrap"
+                               Margin="5"
+                               FontSize="18"/>
+
                     <Button x:Name="BtnConfigure"
-                    Content="Configure"
-                    Style="{StaticResource DarkButton}"
-                    MaxWidth="150"
-                    MaxHeight="60"
-                    FontSize="20"
-                    Margin="5"
-                    IsEnabled="{Binding DisconnectButtonEnabled}"/>
+                            Content="Configure"
+                            Style="{StaticResource DarkButton}"
+                            MaxWidth="150"
+                            MaxHeight="60"
+                            FontSize="20"
+                            Margin="5"
+                            IsEnabled="{Binding DisconnectButtonEnabled}"/>
 
                 </StackPanel>
                 

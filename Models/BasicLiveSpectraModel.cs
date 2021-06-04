@@ -86,5 +86,22 @@ namespace AnaLight.Models
                 Adapter.SetStreamEnabled(isEnabled);
             }
         }
+
+        public double[] GetAvailableFrequencySettings()
+        {
+            return Adapter?.SupportedFrequencies ?? new double[0];
+        }
+
+        public int[] GetAvailableShutterSettings(double frequency)
+        {
+            if(Adapter != null)
+            {
+                return Adapter.SupportedShutterSettingsForFrequency(frequency);
+            }
+            else
+            {
+                return new int[0];
+            }
+        }
     }
 }

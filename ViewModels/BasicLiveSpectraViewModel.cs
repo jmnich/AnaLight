@@ -81,15 +81,17 @@ namespace AnaLight.ViewModels
         }
         #endregion // Properties with INotify interface
 
-
         private readonly BasicLiveSpectraModel _model;
 
         public ObservableCollection<string> Ports { get; }
+        public ObservableCollection<double> FrequencySettings { get; }
+        public ObservableCollection<int> ShutterSettings { get; }
 
         public UniversalCommand RefreshPortsCommand { get; }
         public ConnectToPortCommand ConnectToCOMCommand { get; }
         public UniversalCommand DisconnectPortCommand { get; }
         public UniversalCommand FreezeStreamSwitchCommand { get; }
+        public RefreshShutterSettingsCommand RefreshShutterCommand { get; }
 
         public BasicLiveSpectraViewModel()
         {
@@ -105,10 +107,15 @@ namespace AnaLight.ViewModels
             ConnectToCOMCommand = new ConnectToPortCommand(OnConnectToCOMCommand);
             DisconnectPortCommand = new UniversalCommand(OnDisconnectPortCommand);
             FreezeStreamSwitchCommand = new UniversalCommand(OnAcquisitionFreezeSwitchCommand);
+            RefreshShutterCommand = new RefreshShutterSettingsCommand(OnRefreshShutterSettingsCommand);
 
             Ports = new ObservableCollection<string>();
+            FrequencySettings = new ObservableCollection<double>();
+            ShutterSettings = new ObservableCollection<int>();
 
             COMSelectionComboEnabled = true;
+
+            FrequencySettings = new ObservableCollection<double>(_model.GetAvailableFrequencySettings());
         }
 
         private void OnNewSpectraReceived(object sender, BasicSpectraContainer newSpectra)
@@ -160,6 +167,16 @@ namespace AnaLight.ViewModels
         private void OnConnectToCOMCommand(string port)
         {
             _model.TryConnect(port);
+        }
+
+        private void OnRefreshShutterSettingsCommand(double frequency)
+        {
+            ShutterSettings.Clear();
+            
+            foreach(int shutterSetting in _model.GetAvailableShutterSettings(frequency))
+            {
+                ShutterSettings.Add(shutterSetting);
+            }
         }
 
         private void OnConnectedToPort(object sender, string port)

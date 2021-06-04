@@ -47,8 +47,6 @@ namespace AnaLight.Views
             // handle a click on the combo box - COM list should refresh
             ComPortsCombo.DropDownOpened += (sender, param) =>
             {
-                Debug.WriteLine("Combo refresh");
-
                 var viewModel = DataContext as BasicLiveSpectraViewModel;
 
                 bool canExecute = viewModel?.RefreshPortsCommand?.CanExecute(null) ?? false;
@@ -56,6 +54,41 @@ namespace AnaLight.Views
                 if (canExecute)
                 {
                     viewModel?.RefreshPortsCommand?.Execute(null);
+                }
+            };
+
+            // refresh combo with shutter settings whenever frequency setting selection is changed
+            FrequencyCombo.SelectionChanged += (sender, param) =>
+            {
+                var viewModel = DataContext as BasicLiveSpectraViewModel;
+
+                bool canExecute = viewModel?.RefreshShutterCommand?.CanExecute(null) ?? false;
+
+                if (canExecute && (FrequencyCombo.SelectedValue is double sel))
+                {
+                    viewModel?.RefreshShutterCommand?.Execute(sel);
+                }
+
+                // clear period and exposure fields whenever selected frequency is changed
+                periodTextBlock.Text = "-";
+                exposureTextBlock.Text = "-";
+            };
+
+            // refresh calculated period and exposure whenever a new shutter setting is selected
+            ShutterCombo.SelectionChanged += (sender, param) =>
+            {
+                var freqSelection = FrequencyCombo.SelectedItem;
+                var shutterSelection = ShutterCombo.SelectedItem;
+
+                if(freqSelection == null || shutterSelection == null)
+                {
+                    periodTextBlock.Text = "-";
+                    exposureTextBlock.Text = "-";
+                }
+                else
+                {
+                    periodTextBlock.Text = $"Period = {1.0E3 / (double)freqSelection}ms";
+                    exposureTextBlock.Text = $"Exposure = {1.0E3 / (double)freqSelection / (int)shutterSelection}ms";
                 }
             };
         }
