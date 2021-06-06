@@ -138,11 +138,13 @@ namespace AnaLight.Adapters
 
                 // transmit header
                 _serialPort?.Write(header, 0, header.Length);
+                Debug.WriteLine($"Stamp 1 {DateTime.Now:O}");
 
                 // transmit paylod with delay
                 Task.Delay(10).ContinueWith(_ =>
                 {
                     _serialPort?.Write(payload, 0, payload.Length);
+                    Debug.WriteLine($"Stamp 2 {DateTime.Now:O}");
                 });
             }
             else
