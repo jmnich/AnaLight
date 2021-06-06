@@ -109,7 +109,6 @@
             <TextBlock Text="Acquisition config." 
                        Style="{StaticResource DarkTextBlock}"
                        TextWrapping="Wrap"
-                       Foreground="DarkGreen"
                        FontSize="18"
                        Margin="5,15,5,5"/>
 
@@ -138,7 +137,6 @@
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
                                    TextWrapping="Wrap"
-                                   Foreground="DarkGreen"
                                    FontSize="18"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0"
@@ -147,7 +145,6 @@
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
                                    TextWrapping="Wrap"
-                                   Foreground="DarkGreen"
                                    FontSize="18"/>
 
                         <ComboBox Grid.Row="0" Grid.Column="1"
@@ -189,7 +186,8 @@
                             MaxHeight="60"
                             FontSize="20"
                             Margin="5"
-                            IsEnabled="{Binding DisconnectButtonEnabled}"/>
+                            IsEnabled="{Binding ConfigurationButtonEnabled}" 
+                            Click="BtnConfigure_Click"/>
 
                 </StackPanel>
                 

@@ -134,7 +134,16 @@ namespace AnaLight.Adapters
         {
             if(SupportedFrequencies.Contains(frequency) && SupportedShutterSettingsForFrequency(frequency).Contains(shutterSetting))
             {
-                Debug.WriteLine($"Configuration command requested\t\tf={frequency}   sh={shutterSetting}");
+                AssembleConfigurationCommand(frequency, shutterSetting, out byte[] header, out byte[] payload);
+
+                // transmit header
+                _serialPort?.Write(header, 0, header.Length);
+
+                // transmit paylod with delay
+                Task.Delay(10).ContinueWith(_ =>
+                {
+                    _serialPort?.Write(payload, 0, payload.Length);
+                });
             }
             else
             {
@@ -201,6 +210,42 @@ namespace AnaLight.Adapters
                     NewSpectraAvailable?.Invoke(this, spectra);
                 }
             }
+        }
+
+        private void AssembleConfigurationCommand(double frequency, int shutter, out byte[] cmdHeader, out byte[] cmdPayload)
+        {
+            byte[] header = new byte[16];
+            byte[] payload = new byte[8];
+
+            UInt32 cmdId = 100;
+            UInt32 payloadSize = 8;
+            UInt32 payloadCRC = 0;
+            UInt32 headerCRC = 0;
+
+            // horrible parsing
+            var h1 = BitConverter.GetBytes(cmdId);
+            var h2 = BitConverter.GetBytes(payloadSize);
+            var h3 = BitConverter.GetBytes(payloadCRC);
+            var h4 = BitConverter.GetBytes(headerCRC);
+
+            // this makes me sick
+            Array.Copy(h1, 0, header, 0, 4);
+            Array.Copy(h2, 0, header, 4, 4);
+            Array.Copy(h3, 0, header, 8, 4);
+            Array.Copy(h4, 0, header, 12, 4);
+
+            // so terrible
+            int fIndex = Array.IndexOf(SupportedFrequencies, frequency);
+
+            var p1 = BitConverter.GetBytes(fIndex);
+            var p2 = BitConverter.GetBytes(shutter);
+
+            // puke
+            Array.Copy(p1, 0, payload, 0, 4);
+            Array.Copy(p2, 0, payload, 4, 4);
+
+            cmdHeader = header;
+            cmdPayload = payload;
         }
     }
 }

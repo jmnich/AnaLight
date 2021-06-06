@@ -69,6 +69,7 @@
     <Compile Include="Adapters\ISerialSpectraStreamerAdapter.cs" />
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
     <Compile Include="Commands\ConnectToPortCommand.cs" />
+    <Compile Include="Commands\FreqAndShutterConfigCommand.cs" />
     <Compile Include="Commands\OpenPanelCommand.cs" />
     <Compile Include="Commands\RefreshShutterSettingsCommand.cs" />
     <Compile Include="Containers\BasicSpectraContainer.cs" />

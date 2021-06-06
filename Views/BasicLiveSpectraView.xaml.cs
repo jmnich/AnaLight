@@ -61,6 +61,7 @@ namespace AnaLight.Views
             FrequencyCombo.SelectionChanged += (sender, param) =>
             {
                 var viewModel = DataContext as BasicLiveSpectraViewModel;
+                viewModel.ConfigurationButtonEnabled = false;
 
                 bool canExecute = viewModel?.RefreshShutterCommand?.CanExecute(null) ?? false;
 
@@ -77,6 +78,9 @@ namespace AnaLight.Views
             // refresh calculated period and exposure whenever a new shutter setting is selected
             ShutterCombo.SelectionChanged += (sender, param) =>
             {
+                var viewModel = DataContext as BasicLiveSpectraViewModel;
+                viewModel.ConfigurationButtonEnabled = false;
+
                 var freqSelection = FrequencyCombo.SelectedItem;
                 var shutterSelection = ShutterCombo.SelectedItem;
 
@@ -89,8 +93,32 @@ namespace AnaLight.Views
                 {
                     periodTextBlock.Text = $"Period = {1.0E3 / (double)freqSelection}ms";
                     exposureTextBlock.Text = $"Exposure = {1.0E3 / (double)freqSelection / (int)shutterSelection}ms";
+
+                    viewModel.ConfigurationButtonEnabled = true;
                 }
             };
+        }
+
+        // invoke frequency and shutter configuration command from the view model
+        private void BtnConfigure_Click(object sender, RoutedEventArgs e)
+        {
+            var freqSelection = FrequencyCombo.SelectedItem;
+            var shutterSelection = ShutterCombo.SelectedItem;
+
+            if (freqSelection != null && shutterSelection != null)
+            {
+                var viewModel = DataContext as BasicLiveSpectraViewModel;
+                bool canExecute = viewModel?.FreqAndShutterCommand?.CanExecute(null) ?? false;
+
+                if(canExecute)
+                {
+                    viewModel?.FreqAndShutterCommand?.Execute((freqSelection, shutterSelection));
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select frequency and shutter settings first!");
+            }
         }
     }
 }

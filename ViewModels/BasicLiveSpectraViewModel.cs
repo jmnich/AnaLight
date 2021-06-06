@@ -65,6 +65,20 @@ namespace AnaLight.ViewModels
             }
         }
 
+        private bool _configurationButtonEnabled;
+        public bool ConfigurationButtonEnabled
+        {
+            set
+            {
+                _configurationButtonEnabled = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _configurationButtonEnabled;
+            }
+        }
+
         private GearedValues<ObservablePoint> chartValues;
         public GearedValues<ObservablePoint> ChartValues
         {
@@ -81,17 +95,23 @@ namespace AnaLight.ViewModels
         }
         #endregion // Properties with INotify interface
 
+        #region Properties - other
         private readonly BasicLiveSpectraModel _model;
 
         public ObservableCollection<string> Ports { get; }
         public ObservableCollection<double> FrequencySettings { get; }
         public ObservableCollection<int> ShutterSettings { get; }
+        #endregion // Properties - other
+
+        #region Commands
 
         public UniversalCommand RefreshPortsCommand { get; }
         public ConnectToPortCommand ConnectToCOMCommand { get; }
         public UniversalCommand DisconnectPortCommand { get; }
         public UniversalCommand FreezeStreamSwitchCommand { get; }
         public RefreshShutterSettingsCommand RefreshShutterCommand { get; }
+        public FreqAndShutterConfigCommand FreqAndShutterCommand { get; }
+        #endregion // Commands
 
         public BasicLiveSpectraViewModel()
         {
@@ -108,15 +128,19 @@ namespace AnaLight.ViewModels
             DisconnectPortCommand = new UniversalCommand(OnDisconnectPortCommand);
             FreezeStreamSwitchCommand = new UniversalCommand(OnAcquisitionFreezeSwitchCommand);
             RefreshShutterCommand = new RefreshShutterSettingsCommand(OnRefreshShutterSettingsCommand);
+            FreqAndShutterCommand = new FreqAndShutterConfigCommand(OnFreqAndShSettingsConfigCommand);
 
             Ports = new ObservableCollection<string>();
             FrequencySettings = new ObservableCollection<double>();
             ShutterSettings = new ObservableCollection<int>();
 
             COMSelectionComboEnabled = true;
+            ConfigurationButtonEnabled = false;
 
             FrequencySettings = new ObservableCollection<double>(_model.GetAvailableFrequencySettings());
         }
+
+        #region Model event handlers
 
         private void OnNewSpectraReceived(object sender, BasicSpectraContainer newSpectra)
         {
@@ -135,6 +159,19 @@ namespace AnaLight.ViewModels
             });
         }
 
+        private void OnConnectedToPort(object sender, string port)
+        {
+            COMSelectionComboEnabled = false;
+        }
+
+        private void OnDisconnectedFromPort(object sender, object arg)
+        {
+            COMSelectionComboEnabled = true;
+            AcquisitionFrozen = false;
+        }
+        #endregion // Model event handlers
+
+        #region Command handlers
         private void OnRefreshPortsCommand()
         {
             Ports.Clear();
@@ -162,6 +199,7 @@ namespace AnaLight.ViewModels
         private void OnDisconnectPortCommand()
         {
             _model.Disconnect();
+            ConfigurationButtonEnabled = false;
         }
 
         private void OnConnectToCOMCommand(string port)
@@ -179,15 +217,11 @@ namespace AnaLight.ViewModels
             }
         }
 
-        private void OnConnectedToPort(object sender, string port)
+        private void OnFreqAndShSettingsConfigCommand(double freq, int shutter)
         {
-            COMSelectionComboEnabled = false;
+            Debug.WriteLine($"F {freq}   SH {shutter}");
+            _model?.SendConfigurationCommand(freq, shutter);
         }
-
-        private void OnDisconnectedFromPort(object sender, object arg)
-        {
-            COMSelectionComboEnabled = true;
-            AcquisitionFrozen = false;
-        }
+        #endregion // Command handlers
     }
 }

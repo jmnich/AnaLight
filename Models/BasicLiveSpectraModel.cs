@@ -92,6 +92,25 @@ namespace AnaLight.Models
             return Adapter?.SupportedFrequencies ?? new double[0];
         }
 
+        public void SendConfigurationCommand(double frequency, int shutter)
+        {
+            // validate arguments
+            if(!Adapter?.SupportedFrequencies.Contains(frequency) ?? true)
+            {
+                Debug.WriteLine($"Configuration command dropped. Incorrect frequency: {frequency}");
+                return;
+            }
+
+            if(!Adapter?.SupportedShutterSettingsForFrequency(frequency).Contains(shutter) ?? true)
+            {
+                Debug.WriteLine($"Configuration command dropped. Incorrect shutter: {shutter}");
+                return;
+            }
+
+            // pass values to the adapter
+            Adapter?.TransmitConfigurationCommand(frequency, shutter);
+        }
+
         public int[] GetAvailableShutterSettings(double frequency)
         {
             if(Adapter != null)
