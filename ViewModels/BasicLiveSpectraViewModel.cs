@@ -93,6 +93,36 @@ namespace AnaLight.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private int maxPointIndex;
+        public int MaxPointIndex
+        {
+            get
+            {
+                return maxPointIndex;
+            }
+
+            set
+            {
+                maxPointIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservablePoint maxPoint;
+        public ObservablePoint MaxPoint
+        {
+            get
+            {
+                return maxPoint;
+            }
+
+            set
+            {
+                maxPoint = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion // Properties with INotify interface
 
         #region Properties - other
@@ -144,17 +174,25 @@ namespace AnaLight.ViewModels
 
         private void OnNewSpectraReceived(object sender, BasicSpectraContainer newSpectra)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current?.Dispatcher?.Invoke(() =>
             {
                 while(ChartValues.Count < newSpectra.YAxis.Length)
                 {
                     ChartValues.Add(new ObservablePoint());
                 }
 
+                MaxPoint = ChartValues[0];
+
                 for (int i = 0; i < ChartValues.Count; i++)
                 {
                     ChartValues[i].X = newSpectra.XAxis[i];
                     ChartValues[i].Y = newSpectra.YAxis[i];
+
+                    if (newSpectra.YAxis[i] > MaxPoint.Y)
+                    {
+                        MaxPoint = ChartValues[i];
+                        MaxPointIndex = i;
+                    }
                 }
             });
         }
