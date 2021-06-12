@@ -83,11 +83,15 @@
     <Compile Include="Models\HomePageModel.cs" />
     <Compile Include="TabBase.cs" />
     <Compile Include="ViewModels\BasicLiveSpectraViewModel.cs" />
+    <Compile Include="ViewModels\BufferViewerViewModel.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\BasicLiveSpectraView.xaml.cs">
       <DependentUpon>BasicLiveSpectraView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BufferViewerView.xaml.cs">
+      <DependentUpon>BufferViewerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converters\FreezeButtonContentConverter.cs" />
     <Compile Include="Views\HomePageView.xaml.cs">
@@ -114,6 +118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BasicLiveSpectraView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BufferViewerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -202,13 +202,13 @@ namespace AnaLight.Adapters
                         y[i] = (double)(points[i]);
                     }
 
-                    BasicSpectraContainer spectra = new BasicSpectraContainer
+                    BasicSpectraContainer spectra = new BasicSpectraContainer("Alpha prototype")
                     {
                         XAxis = x,
                         YAxis = y,
-                        Comment = "Acquired by alpha prototype"
                     };
-
+                    spectra.Name = $"{spectra.TimeStamp:dd.MM hh:mm:ss.fff}";
+                    
                     NewSpectraAvailable?.Invoke(this, spectra);
                 }
             }

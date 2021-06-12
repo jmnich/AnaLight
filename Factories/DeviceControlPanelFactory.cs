@@ -16,6 +16,7 @@ namespace AnaLight.Factories
         DUMMY,
         HOME,
         BASIC_LIVE_SPECTRA,
+        BUFFER_VIEWER,
     }
 
     public class DeviceControlPanelFactory
@@ -53,6 +54,15 @@ namespace AnaLight.Factories
             AvailableControlPanels.Add(
                 new DeviceControlPanelInfo
                 {
+                    OpenPanelCommand = new OpenPanelCommand(this, DeviceControlPanelType.BUFFER_VIEWER),
+                    PanelType = DeviceControlPanelType.BUFFER_VIEWER,
+                    PanelDescription = "A tool for working with archived spectra",
+                    SupportedDevices = new PhysicalDeviceInfo[0]
+                });
+
+            AvailableControlPanels.Add(
+                new DeviceControlPanelInfo
+                {
                     OpenPanelCommand = new OpenPanelCommand(this, DeviceControlPanelType.DUMMY),
                     PanelType = DeviceControlPanelType.DUMMY,
                     PanelDescription = "Dummy panel for debugging purposes",
@@ -83,7 +93,7 @@ namespace AnaLight.Factories
             Debug.WriteLine("Device control panel factory instance created");
         }
 
-        public void CreatePanel(DeviceControlPanelType type)
+        public void CreatePanel(DeviceControlPanelType type, object arg = null)
         {
             TabBase view;
 
@@ -129,6 +139,18 @@ namespace AnaLight.Factories
                         break;
                     }
 
+                case DeviceControlPanelType.BUFFER_VIEWER:
+                    {
+                        view = new Views.BufferViewerView
+                        {
+                            TabHeaderText = "Viewer",
+                            TabInfo = "Spectra collection viewer",
+                            DataContext = new ViewModels.BufferViewerViewModel(arg as ObservableCollection<BasicSpectraContainer>)
+                        };
+
+                        break;
+                    }
+
                 default:
                     throw new Exception("Device control panel factory: unknown panel requested");
             }
@@ -146,6 +168,11 @@ namespace AnaLight.Factories
                 case DeviceControlPanelType.BASIC_LIVE_SPECTRA:
                     {
                         return "Basic live spectra";
+                    }
+
+                case DeviceControlPanelType.BUFFER_VIEWER:
+                    {
+                        return "Viewer";
                     }
 
                 default:
