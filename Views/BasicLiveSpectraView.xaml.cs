@@ -2,6 +2,7 @@
 using LiveCharts;
 using LiveCharts.Defaults;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -126,6 +127,16 @@ namespace AnaLight.Views
                 RedrawPeakTrackerLine();
             };
 
+            // redraw the tracker line each time chart is resized (this doesn't seem to work very well)
+            chartSpectra.SizeChanged += (sender, param) =>
+            {
+                // this delay is absolutely required - not sure why but it won't redraw correctly without it
+                Task.Delay(200).ContinueWith(_ =>
+                {
+                    RedrawPeakTrackerLine();
+                });
+            };
+
             // draw the tracker line
             TrackingEnabledCheckBox.Checked += (sender, args) =>
             {
@@ -147,11 +158,55 @@ namespace AnaLight.Views
         // redraw the peak tracking line
         private void RedrawPeakTrackerLine()
         {
-            if(TrackingEnabledCheckBox?.IsChecked ?? false)
-            {
-                var viewModel = DataContext as BasicLiveSpectraViewModel;
+            this.Dispatcher.Invoke(() => {
 
-                if(viewModel == null || viewModel.MaxPoint == null)
+                if (TrackingEnabledCheckBox?.IsChecked ?? false)
+                {
+                    var viewModel = DataContext as BasicLiveSpectraViewModel;
+
+                    if (viewModel == null || viewModel.MaxPoint == null)
+                    {
+                        TrackingLine.X1 = 0;
+                        TrackingLine.X2 = 0;
+                        TrackingLine.Y1 = 0;
+                        TrackingLine.Y2 = 0;
+                        TrackingLine.Visibility = Visibility.Hidden;
+                        TrackingText.Visibility = Visibility.Hidden;
+                        return;
+                    }
+
+                    var canv = chartSpectra.Content as Canvas;
+
+                    Canvas veryInternalCanvas = null;
+                    foreach (UIElement u in canv.Children)
+                    {
+                        if (u is Canvas)
+                        {
+                            veryInternalCanvas = u as Canvas;
+                        }
+                    }
+
+                    double XaxisSpanInPixels = veryInternalCanvas?.ActualWidth ?? 1;
+                    double xCorrection = -10;
+
+                    // this dum formula seems to work 
+                    double xPixel = (viewModel.MaxPoint.X / 3694.0) * XaxisSpanInPixels +
+                        (canv.ActualWidth - veryInternalCanvas.ActualWidth) +
+                        xCorrection;
+
+                    Canvas.SetLeft(TrackingText, xPixel - 5);
+                    Canvas.SetTop(TrackingText, 5);
+
+                    TrackingText.Text = $"{viewModel.MaxPoint.X} | {viewModel.MaxPoint.Y}";
+
+                    TrackingLine.X1 = xPixel;
+                    TrackingLine.X2 = xPixel;
+                    TrackingLine.Y1 = 30;
+                    TrackingLine.Y2 = canv.ActualHeight - 50;
+                    TrackingLine.Visibility = Visibility.Visible;
+                    TrackingText.Visibility = Visibility.Visible;
+                }
+                else
                 {
                     TrackingLine.X1 = 0;
                     TrackingLine.X2 = 0;
@@ -159,49 +214,8 @@ namespace AnaLight.Views
                     TrackingLine.Y2 = 0;
                     TrackingLine.Visibility = Visibility.Hidden;
                     TrackingText.Visibility = Visibility.Hidden;
-                    return;
                 }
-
-                var canv = chartSpectra.Content as Canvas;
-
-                Canvas veryInternalCanvas = null;
-                foreach (UIElement u in canv.Children)
-                {
-                    if (u is Canvas)
-                    {
-                        veryInternalCanvas = u as Canvas;
-                    }
-                }
-
-                double XaxisSpanInPixels = veryInternalCanvas?.ActualWidth ?? 1;
-                double xCorrection = -10;
-                
-                // this dum formula seems to work 
-                double xPixel = (viewModel.MaxPoint.X / 3694.0) * XaxisSpanInPixels + 
-                    (canv.ActualWidth - veryInternalCanvas.ActualWidth) + 
-                    xCorrection;
-
-                Canvas.SetLeft(TrackingText, xPixel - 5);
-                Canvas.SetTop(TrackingText, 5);
-
-                TrackingText.Text = $"{viewModel.MaxPoint.X} | {viewModel.MaxPoint.Y}";
-
-                TrackingLine.X1 = xPixel;
-                TrackingLine.X2 = xPixel;
-                TrackingLine.Y1 = 30;
-                TrackingLine.Y2 = canv.ActualHeight - 50;
-                TrackingLine.Visibility = Visibility.Visible;
-                TrackingText.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                TrackingLine.X1 = 0;
-                TrackingLine.X2 = 0;
-                TrackingLine.Y1 = 0;
-                TrackingLine.Y2 = 0;
-                TrackingLine.Visibility = Visibility.Hidden;
-                TrackingText.Visibility = Visibility.Hidden;
-            }
+            });
         }
 
         // invoke frequency and shutter configuration command from the view model
