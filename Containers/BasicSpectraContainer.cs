@@ -62,5 +62,10 @@ namespace AnaLight.Containers
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }

@@ -13,12 +13,9 @@ namespace AnaLight.Models
     {
         public ObservableCollection<BasicSpectraContainer> ListOfSpectra { get; }
 
-        private BufferViewerModel _model;
-
         public BufferViewerModel(ObservableCollection<BasicSpectraContainer> listOfSpectra)
         {
-            _model = new BufferViewerModel(listOfSpectra);
-            ListOfSpectra = _model.ListOfSpectra;
+            ListOfSpectra = listOfSpectra;
         }
     }
 }

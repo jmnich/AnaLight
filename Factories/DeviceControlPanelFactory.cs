@@ -133,7 +133,7 @@ namespace AnaLight.Factories
                         {
                             TabHeaderText = "Basic live spectra",
                             TabInfo = "Acquisition and display of raw spectra",
-                            DataContext = new ViewModels.BasicLiveSpectraViewModel()
+                            DataContext = new ViewModels.BasicLiveSpectraViewModel(this),
                         };
 
                         break;

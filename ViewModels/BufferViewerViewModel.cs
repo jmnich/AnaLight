@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AnaLight.Containers;
+using AnaLight.Models;
 
 namespace AnaLight.ViewModels
 {
@@ -20,6 +21,7 @@ namespace AnaLight.ViewModels
         #endregion // Properties with INotify interface
 
         #region Properties - other
+        private BufferViewerModel _model;
         public BufferViewerMode ViewerMode { get; }
         public ObservableCollection<BasicSpectraContainer> Spectra { get; }
         #endregion // Properties - other
@@ -27,7 +29,14 @@ namespace AnaLight.ViewModels
         #region Commands
         #endregion // Commands
 
-        public BufferViewerViewModel(ObservableCollection<BasicSpectraContainer> spectraList)
+        public BufferViewerViewModel()
+        {
+            Spectra = new ObservableCollection<BasicSpectraContainer>();
+            ViewerMode = BufferViewerMode.ARCHIVE_VIEWER;
+            _model = new BufferViewerModel(Spectra);
+        }
+
+        public BufferViewerViewModel(ObservableCollection<BasicSpectraContainer> spectraList = null)
         {
             Spectra = spectraList ?? new ObservableCollection<BasicSpectraContainer>();
 
@@ -39,6 +48,8 @@ namespace AnaLight.ViewModels
             {
                 ViewerMode = BufferViewerMode.LIVE_VIEWER;
             }
+
+            _model = new BufferViewerModel(Spectra);
         }
 
         #region Model event handlers

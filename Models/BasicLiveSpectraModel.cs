@@ -9,6 +9,7 @@ using AnaLight.Adapters;
 using AnaLight.Factories;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
+using System.Windows;
 
 namespace AnaLight.Models
 {
@@ -16,7 +17,9 @@ namespace AnaLight.Models
     {
         private ISerialSpectraStreamerAdapter Adapter { get; set; }
 
-        private ObservableCollection<BasicSpectraContainer> SpectraList { get; }
+        public ObservableCollection<BasicSpectraContainer> SpectraList { get; }
+
+        public bool SaveReceivedSpectra { get; set; }
 
         private readonly int _alphaPrototypeBaud = 460800;
 
@@ -42,8 +45,12 @@ namespace AnaLight.Models
         private void OnNewSpectraAvailable(object sender, BasicSpectraContainer spectra)
         {
             Debug.WriteLine("new spectra received");
-            SpectraList.Add(spectra);
             NewSpectraReceived?.Invoke(this, spectra);
+
+            if(SaveReceivedSpectra)
+            {
+                Application.Current?.Dispatcher?.BeginInvoke(new Action(() => SpectraList?.Add(spectra)));
+            }
         }
 
         public string[] GetListOfAvailableCOMPorts()

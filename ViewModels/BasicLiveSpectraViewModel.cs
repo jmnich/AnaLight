@@ -13,6 +13,7 @@ using LiveCharts.Geared;
 using System.Windows;
 using LiveCharts.Defaults;
 using AnaLight.Commands;
+using AnaLight.Factories;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -123,6 +124,21 @@ namespace AnaLight.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private bool saveReceivedSpectra;
+        public bool SaveReceivedSpectra
+        {
+            get
+            {
+                return saveReceivedSpectra;
+            }
+            set
+            {
+                saveReceivedSpectra = value;
+                _model.SaveReceivedSpectra = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion // Properties with INotify interface
 
         #region Properties - other
@@ -131,6 +147,14 @@ namespace AnaLight.ViewModels
         public ObservableCollection<string> Ports { get; }
         public ObservableCollection<double> FrequencySettings { get; }
         public ObservableCollection<int> ShutterSettings { get; }
+
+        public ObservableCollection<BasicSpectraContainer> SavedSpectra
+        {
+            get
+            {
+                return _model?.SpectraList;
+            }
+        }
         #endregion // Properties - other
 
         #region Commands
@@ -141,9 +165,10 @@ namespace AnaLight.ViewModels
         public UniversalCommand FreezeStreamSwitchCommand { get; }
         public RefreshShutterSettingsCommand RefreshShutterCommand { get; }
         public FreqAndShutterConfigCommand FreqAndShutterCommand { get; }
+        public OpenViewerCommand OpenViewerPanelCommand { get; }
         #endregion // Commands
 
-        public BasicLiveSpectraViewModel()
+        public BasicLiveSpectraViewModel(DeviceControlPanelFactory panelFactory)
         {
             ChartValues = new GearedValues<ObservablePoint>();
             ChartValues.WithQuality(Quality.Medium);
@@ -159,6 +184,7 @@ namespace AnaLight.ViewModels
             FreezeStreamSwitchCommand = new UniversalCommand(OnAcquisitionFreezeSwitchCommand);
             RefreshShutterCommand = new RefreshShutterSettingsCommand(OnRefreshShutterSettingsCommand);
             FreqAndShutterCommand = new FreqAndShutterConfigCommand(OnFreqAndShSettingsConfigCommand);
+            OpenViewerPanelCommand = new OpenViewerCommand(SavedSpectra, panelFactory);
 
             Ports = new ObservableCollection<string>();
             FrequencySettings = new ObservableCollection<double>();
@@ -168,6 +194,8 @@ namespace AnaLight.ViewModels
             ConfigurationButtonEnabled = false;
 
             FrequencySettings = new ObservableCollection<double>(_model.GetAvailableFrequencySettings());
+
+            SaveReceivedSpectra = false;
         }
 
         #region Model event handlers

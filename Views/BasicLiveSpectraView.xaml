@@ -34,7 +34,7 @@
 
         <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}" x:Key="DarkTextBlock">
-                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontSize" Value="18"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="Margin" Value="1"/>
             </Style>
@@ -207,12 +207,6 @@
                     Padding="2">
 
                 <StackPanel Orientation="Vertical">
-                    
-                    <!--<TextBlock Text="Peak tracking" 
-                       Style="{StaticResource DarkTextBlock}"
-                       TextWrapping="Wrap"
-                       FontSize="16"
-                       Margin="5"/>-->
 
                     <CheckBox x:Name="TrackingEnabledCheckBox"
                               IsChecked="True"
@@ -222,14 +216,52 @@
 
                         <TextBlock Text="Peak tracking" 
                                    VerticalAlignment="Center" 
-                                   Style="{StaticResource DarkTextBlock}"/>
+                                   Style="{StaticResource DarkTextBlock}"
+                                   TextWrapping="Wrap"/>
                     </CheckBox>
                     
                 </StackPanel>
                 
             </Border>
 
+            <Border Background="Transparent"
+                    BorderThickness="1"
+                    BorderBrush="DarkGreen"
+                    CornerRadius="5"
+                    Margin="5,5"
+                    Padding="2">
 
+                <StackPanel Orientation="Vertical">
+
+                    <CheckBox x:Name="SaveSpectraCheckBox"
+                              IsChecked="{Binding SaveReceivedSpectra}"
+                              Margin="5"
+                              HorizontalAlignment="Left"
+                              VerticalContentAlignment="Center">
+
+                        <TextBlock Text="Save incoming data" 
+                                   VerticalAlignment="Center" 
+                                   Style="{StaticResource DarkTextBlock}"
+                                   TextWrapping="Wrap"/>
+                    </CheckBox>
+
+                    <TextBlock Style="{StaticResource DarkTextBlock}"
+                               FontSize="18"
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left"
+                               Margin="3"
+                               Text="{Binding SavedSpectra.Count, StringFormat=Saved frames: {0}}"/>
+                </StackPanel>
+            </Border>
+
+            <Button x:Name="BtnViewer"
+                    Content="Open viewer"
+                    Style="{StaticResource DarkButton}"
+                    MaxWidth="150"
+                    MaxHeight="60"
+                    FontSize="18"
+                    Margin="5,20,5,5"
+                    Command="{Binding OpenViewerPanelCommand}"/>
 
         </StackPanel>
 
