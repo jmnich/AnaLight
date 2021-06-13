@@ -12,6 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using AnaLight.Containers;
+using AnaLight.ViewModels;
 
 namespace AnaLight.Views
 {
@@ -23,6 +28,26 @@ namespace AnaLight.Views
         public BufferViewerView() : base("Viewer")
         {
             InitializeComponent();
+
+            // whenever spectra are selected send command to load them to the chart area
+            bufferContentList.SelectionChanged += (s, p) =>
+            {
+                //var items = bufferContentList.SelectedItems;
+                List<BasicSpectraContainer> items = bufferContentList.SelectedItems.Cast<BasicSpectraContainer>().ToList();
+
+                if (DataContext is BufferViewerViewModel viewModel)
+                {
+                    if (viewModel.ChangeDisplayedChartsCommand?.CanExecute(null) ?? false)
+                    {
+                        viewModel.ChangeDisplayedChartsCommand.Execute(items);
+                    }
+                }
+            };
+        }
+
+        public void OnSavedSpectraCountChanged(object sender, int cnt)
+        {
+            TabInfo = $"{(int)cnt} frames available";
         }
     }
 }

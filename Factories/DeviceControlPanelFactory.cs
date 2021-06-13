@@ -141,12 +141,17 @@ namespace AnaLight.Factories
 
                 case DeviceControlPanelType.BUFFER_VIEWER:
                     {
+                        var dataContext = new ViewModels.BufferViewerViewModel(arg as ObservableCollection<BasicSpectraContainer>);
+
                         view = new Views.BufferViewerView
                         {
-                            TabHeaderText = "Viewer",
-                            TabInfo = "Spectra collection viewer",
-                            DataContext = new ViewModels.BufferViewerViewModel(arg as ObservableCollection<BasicSpectraContainer>)
+                            TabHeaderText = arg == null ? "Viewer - archive" : "Viewer - live",
+                            TabInfo = arg == null ? "Spectra archive viewer" : "Real-time spectra collection viewer",
+                            DataContext = dataContext,
                         };
+
+                        // link view model events to view
+                        dataContext.SpectraCountChanged += (view as Views.BufferViewerView).OnSavedSpectraCountChanged;
 
                         break;
                     }

@@ -209,7 +209,7 @@
                 <StackPanel Orientation="Vertical">
 
                     <CheckBox x:Name="TrackingEnabledCheckBox"
-                              IsChecked="True"
+                              IsChecked="False"
                               Margin="5"
                               HorizontalAlignment="Left"
                               VerticalContentAlignment="Center">
