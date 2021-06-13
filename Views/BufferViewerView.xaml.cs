@@ -45,6 +45,12 @@ namespace AnaLight.Views
             };
         }
 
+        public void SwitchDataContext(BufferViewerViewModel newViewModel)
+        {
+            DataContext = newViewModel;
+            chartSpectrum.Series = newViewModel.ChartSeries;
+        }
+
         public void OnSavedSpectraCountChanged(object sender, int cnt)
         {
             TabInfo = $"{(int)cnt} frames available";

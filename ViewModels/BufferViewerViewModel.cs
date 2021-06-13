@@ -84,10 +84,9 @@ namespace AnaLight.ViewModels
             {
                 if (seriesCollection.Count > 0)
                 {
-                    // FIXME - i hope this shit goes to hell when I bind series to a chart
                     while (seriesCollection.Count > 0)
                     {
-                        seriesCollection.RemoveAt(seriesCollection.Count - 1);
+                        seriesCollection.RemoveAt(seriesCollection.Count - 1);   
                     }
                 }
 

@@ -147,8 +147,9 @@ namespace AnaLight.Factories
                         {
                             TabHeaderText = arg == null ? "Viewer - archive" : "Viewer - live",
                             TabInfo = arg == null ? "Spectra archive viewer" : "Real-time spectra collection viewer",
-                            DataContext = dataContext,
                         };
+
+                        (view as Views.BufferViewerView).SwitchDataContext(dataContext);
 
                         // link view model events to view
                         dataContext.SpectraCountChanged += (view as Views.BufferViewerView).OnSavedSpectraCountChanged;
