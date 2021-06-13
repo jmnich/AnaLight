@@ -44,7 +44,8 @@
 
             <ListView Grid.Row="0"
                       Name="bufferContentList"
-                      ItemsSource="{Binding Spectra}">
+                      ItemsSource="{Binding Spectra}"
+                      Background="LightGray">
             </ListView>
 
             <TextBlock Grid.Row="1"
@@ -58,36 +59,12 @@
         <lvc:CartesianChart Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" 
                                 Name="chartSpectrum"  
                                 DisableAnimations="True"
-                                Hoverable="False"
+                                Hoverable="True"
                                 DataTooltip="{x:Null}"
-                                Zoom="None">
-
-            <!--<lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Pixel"
-                              MinRange="0"
-                              MaxRange="3694"/>
-            </lvc:CartesianChart.AxisX>-->
-
-            <!--<lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Counts"
-                              MinRange="0"
-                              MaxRange="45000"
-                              MinValue="0"
-                              MaxValue="45000"/>
-            </lvc:CartesianChart.AxisY>-->
-
-            <!--<lvc:CartesianChart.Series>
-                <geared:GLineSeries Values="{Binding ChartValues, UpdateSourceTrigger=PropertyChanged}"
-                                        Title="Hello"
-                                        StrokeThickness="3"
-                                        Stroke="White"
-                                        Fill="Transparent"
-                                        PointGeometry="{x:Null}"
-                                        LineSmoothness="0"/>
-            </lvc:CartesianChart.Series>-->
-
+                                Zoom="None"
+                                LegendLocation="Left"
+                                Foreground="White">
         </lvc:CartesianChart>
-
 
     </Grid>
 </local:TabBase>

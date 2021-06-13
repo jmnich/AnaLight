@@ -11,6 +11,8 @@ using System.Diagnostics;
 using LiveCharts;
 using LiveCharts.Geared;
 using LiveCharts.Defaults;
+using System.Media;
+using System.Windows.Media;
 
 namespace AnaLight.ViewModels
 {
@@ -124,6 +126,8 @@ namespace AnaLight.ViewModels
             ser.Title = spectrum.Name;
             ser.Values = new GearedValues<ObservablePoint>();
             ser.Values.AddRange(points);
+            ser.Fill = Brushes.Transparent;
+            ser.PointGeometry = null;
 
             return ser;
         }
