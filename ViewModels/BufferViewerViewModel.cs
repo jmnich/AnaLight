@@ -125,9 +125,13 @@ namespace AnaLight.ViewModels
             var ser = new GLineSeries();
             ser.Title = spectrum.Name;
             ser.Values = new GearedValues<ObservablePoint>();
+            (ser.Values as GearedValues<ObservablePoint>).WithQuality(Quality.High);
             ser.Values.AddRange(points);
             ser.Fill = Brushes.Transparent;
             ser.PointGeometry = null;
+            ser.StrokeThickness = 3;
+            ser.Opacity = 0.8;
+            ser.SnapsToDevicePixels = true;
 
             return ser;
         }

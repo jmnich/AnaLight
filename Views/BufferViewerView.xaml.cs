@@ -38,15 +38,24 @@ namespace AnaLight.Views
             {
                 ClearCursorObjects();
 
-                List<BasicSpectraContainer> items = bufferContentList.SelectedItems.Cast<BasicSpectraContainer>().ToList();
-
-                if (DataContext is BufferViewerViewModel viewModel)
+                if (bufferContentList.SelectedItems.Count <= 5 && bufferContentList.SelectedItems.Count > 0)
                 {
-                    if (viewModel.ChangeDisplayedChartsCommand?.CanExecute(null) ?? false)
+                    List<BasicSpectraContainer> items = bufferContentList.SelectedItems.Cast<BasicSpectraContainer>().ToList();
+
+                    if (DataContext is BufferViewerViewModel viewModel)
                     {
-                        viewModel.ChangeDisplayedChartsCommand.Execute(items);
+                        if (viewModel.ChangeDisplayedChartsCommand?.CanExecute(null) ?? false)
+                        {
+                            viewModel.ChangeDisplayedChartsCommand.Execute(items);
+                        }
                     }
                 }
+                else
+                {
+                    bufferContentList.UnselectAll();
+                }
+
+
             };
 
             chartSpectrum.DataClick += OnChartDataClick;
@@ -72,43 +81,43 @@ namespace AnaLight.Views
 
         public void OnChartDataClick(object sender, ChartPoint chartPoint)
         {
-            ClearCursorObjects();
+            //ClearCursorObjects();
 
-            // draw the stupid cursor with coordinates
-            double corr = 33;
+            //// draw the stupid cursor with coordinates
+            //double corr = 33;
 
-            CorePoint p = chartPoint.ChartLocation;
-            cursorObjects.AddLast(new Line
-            {
-                X1 = p.X + chartSpectrum.ChartLegend.ActualWidth + corr,
-                X2 = p.X + chartSpectrum.ChartLegend.ActualWidth + corr,
-                Y1 = (chartSpectrum.Content as Canvas).ActualHeight - 20,
-                Y2 = 20,
-                Stroke = Brushes.LightGreen,
-                StrokeThickness = 3,
-                Opacity = 0.6,
-            });
+            //CorePoint p = chartPoint.ChartLocation;
+            //cursorObjects.AddLast(new Line
+            //{
+            //    X1 = p.X + chartSpectrum.ChartLegend.ActualWidth + corr,
+            //    X2 = p.X + chartSpectrum.ChartLegend.ActualWidth + corr,
+            //    Y1 = (chartSpectrum.Content as Canvas).ActualHeight - 20,
+            //    Y2 = 20,
+            //    Stroke = Brushes.LightGreen,
+            //    StrokeThickness = 3,
+            //    Opacity = 0.6,
+            //});
 
-            cursorObjects.AddLast(new TextBlock
-            {
-                Text = $"X: {chartPoint.X}\nY: {chartPoint.Y}",
-                Foreground = Brushes.White,
-                FontWeight = FontWeights.DemiBold,
-                FontSize = 18,
-            });
+            //cursorObjects.AddLast(new TextBlock
+            //{
+            //    Text = $"X: {chartPoint.X}\nY: {chartPoint.Y}",
+            //    Foreground = Brushes.White,
+            //    FontWeight = FontWeights.DemiBold,
+            //    FontSize = 18,
+            //});
 
-            // make sure coordinates will never be clipped by canvas boundary
-            double textYCorrection = p.Y < 50 ? -20 : 40;
-            double textXCorrection = p.X > ((chartSpectrum.Content as Canvas).ActualWidth - 250) ? -100 : 5;
+            //// make sure coordinates will never be clipped by canvas boundary
+            //double textYCorrection = p.Y < 50 ? -20 : 40;
+            //double textXCorrection = p.X > ((chartSpectrum.Content as Canvas).ActualWidth - 250) ? -100 : 5;
 
-            Canvas.SetLeft(cursorObjects.Last.Value, 
-                p.X + chartSpectrum.ChartLegend.ActualWidth + corr + textXCorrection);          
-            Canvas.SetTop(cursorObjects.Last.Value, p.Y - textYCorrection);
+            //Canvas.SetLeft(cursorObjects.Last.Value, 
+            //    p.X + chartSpectrum.ChartLegend.ActualWidth + corr + textXCorrection);          
+            //Canvas.SetTop(cursorObjects.Last.Value, p.Y - textYCorrection);
 
-            foreach (UIElement e in cursorObjects)
-            {
-                (chartSpectrum.Content as Canvas).Children.Add(e);
-            }
+            //foreach (UIElement e in cursorObjects)
+            //{
+            //    (chartSpectrum.Content as Canvas).Children.Add(e);
+            //}
         }
 
         private void ClearCursorObjects()
@@ -118,6 +127,29 @@ namespace AnaLight.Views
                 (chartSpectrum.Content as Canvas).Children.Remove(l);
             }
             cursorObjects.Clear();
+        }
+
+        private void Axis_RangeChanged(LiveCharts.Events.RangeChangedEventArgs eventArgs)
+        {
+            ClearCursorObjects();
+        }
+
+        private void Axis_RangeChanged_1(LiveCharts.Events.RangeChangedEventArgs eventArgs)
+        {
+            ClearCursorObjects();
+        }
+
+        private void autoScaleBtn_Click(object sender, RoutedEventArgs e)
+        {
+            chartSpectrum.AxisX[0].MinValue = double.NaN;
+            chartSpectrum.AxisX[0].MaxValue = double.NaN;
+            chartSpectrum.AxisY[0].MinValue = double.NaN;
+            chartSpectrum.AxisY[0].MaxValue = double.NaN;
+        }
+
+        private void OnListViewItemPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

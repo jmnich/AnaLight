@@ -22,7 +22,7 @@ namespace AnaLight.Containers
         {
             get
             {
-                if (name == null) return $"{TimeStamp:dd.MM hh:mm:ss.fff}";
+                if (name == null) return $"{TimeStamp:dd.MM HH:mm:ss.fff}";
                 else return name;
             }
             set

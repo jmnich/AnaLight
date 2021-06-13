@@ -35,7 +35,92 @@
             </Style>
         </Grid.Resources>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="0" Grid.Column="0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="3" 
+                    x:Name="autoScaleBtn"
+                    Content="Autoscale"
+                    Style="{StaticResource DarkButton}" 
+                    Click="autoScaleBtn_Click"
+                    MaxWidth="160"
+                    MaxHeight="60"
+                    FontSize="20"/>
+
+            <Button Grid.Row="0" Grid.Column="0" 
+                    x:Name="loadBtn"
+                    Content="Load archive"
+                    Style="{StaticResource DarkButton}" 
+                    MaxWidth="160"
+                    MaxHeight="60"
+                    FontSize="20"/>
+
+            <Border Grid.Row="0" Grid.Column="2"
+                    Background="Transparent"
+                    BorderThickness="1"
+                    BorderBrush="DarkGreen"
+                    CornerRadius="5"
+                    Margin="2,2"
+                    Padding="5">
+                
+                <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                           Text="Save spectrum"
+                           Style="{StaticResource DarkTextBlock}"
+                           TextWrapping="Wrap"
+                           FontSize="18"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                <Button Grid.Row="1" Grid.Column="0"
+                        x:Name="btnSaveAll"
+                        Style="{StaticResource DarkButton}"
+                        MaxHeight="40"
+                        MaxWidth="100"
+                        Content="Archive all"/>
+
+                <Button Grid.Row="1" Grid.Column="1"
+                        x:Name="btnSaveCsv"
+                        Style="{StaticResource DarkButton}"
+                        MaxHeight="40"
+                        MaxWidth="100"
+                        Content=".CSV"/>
+
+                <Button Grid.Row="1" Grid.Column="2"
+                        x:Name="btnSavePicture"
+                        Style="{StaticResource DarkButton}"
+                        MaxHeight="40"
+                        MaxWidth="100"
+                        Content="Picture"/>
+
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1"
+              Margin="2">
 
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -46,24 +131,80 @@
                       Name="bufferContentList"
                       ItemsSource="{Binding Spectra}"
                       Background="LightGray">
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="PreviewMouseRightButtonDown"
+                         Handler="OnListViewItemPreviewMouseRightButtonDown" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Rename"/>
+                        <Separator/>
+                        <MenuItem Header="Delete"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
             </ListView>
 
             <TextBlock Grid.Row="1"
                        Style="{StaticResource DarkTextBlock}"
-                       Text="{Binding Spectra.Count, StringFormat=Frames count: {0}}"
-                       FontSize="18"
-                       Margin="5"/>
+                       Text="{Binding Spectra.Count, StringFormat=Frames: {0}}"
+                       FontSize="16"
+                       Margin="5"
+                       TextWrapping="Wrap"/>
 
         </Grid>
+
+
+
+        <Border Grid.Row="2" Grid.Column="1"
+                    Background="Transparent"
+                    BorderThickness="1"
+                    BorderBrush="DarkGreen"
+                    CornerRadius="5"
+                    Margin="2,2"
+                    Padding="5">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- TODO - here goes all the stuff for managing spectra info -->
+            </Grid>
+
+        </Border>
 
         <lvc:CartesianChart Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" 
                                 Name="chartSpectrum"  
                                 DisableAnimations="True"
-                                Hoverable="True"
+                                Hoverable="False"
                                 DataTooltip="{x:Null}"
-                                Zoom="None"
+                                Zoom="Xy"
+                                Pan="Xy"
                                 LegendLocation="Left"
                                 Foreground="White">
+
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="X" RangeChanged="Axis_RangeChanged"/>
+            </lvc:CartesianChart.AxisX>
+
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Y" RangeChanged="Axis_RangeChanged_1"/>
+            </lvc:CartesianChart.AxisY>
+
         </lvc:CartesianChart>
 
     </Grid>
