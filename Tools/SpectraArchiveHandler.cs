@@ -13,6 +13,124 @@ namespace AnaLight.Tools
     public class SpectraArchiveHandler
     {
         /// <summary>
+        /// Loads spectra from XML archive.
+        /// </summary>
+        /// <param name="pathToArchive">Path to XML archive</param>
+        /// <returns>null if failed</returns>
+        public static List<BasicSpectraContainer> LoadSpectra(string pathToArchive)
+        {
+            // validate provided path
+            bool isValid;
+
+            try
+            {
+                string fullPath = Path.GetFullPath(pathToArchive);
+
+                string root = Path.GetPathRoot(pathToArchive);
+                isValid = string.IsNullOrEmpty(root.Trim(new char[] { '\\', '/' })) == false;
+
+                if (pathToArchive.EndsWith(".xml") == false)
+                {
+                   isValid = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                isValid = false;
+            }
+
+            if (isValid == false) return null;
+
+            XmlDocument doc;
+            try
+            {
+                doc = new XmlDocument();
+                doc.Load(pathToArchive);
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+
+            try
+            {
+                List<BasicSpectraContainer> parsedSpectraList = new List<BasicSpectraContainer>();
+                XmlNode archive = doc.SelectSingleNode("/Archive");
+
+                foreach (XmlNode spectrum in archive.ChildNodes)
+                {
+                    string name = spectrum.Attributes["Name"]?.Value ?? "ERROR";
+                    string sourceName = spectrum.Attributes["SourceName"]?.Value ?? "ERROR";
+
+                    // make sure time stamp makes any sense at all
+                    string ts = spectrum.Attributes["TimeStamp"].Value;
+                    DateTime timeStamp;
+                    if(ts is string)
+                    {
+                        try
+                        {
+                            timeStamp = DateTime.Parse(ts);
+                        }
+                        catch(Exception)
+                        {
+                            return null;
+                        }
+                    } 
+                    else
+                    {
+                        return null;
+                    }
+
+                    int ptsCount;
+                    if (int.TryParse(spectrum.Attributes["PointsCount"].Value, out ptsCount) == false)
+                    {
+                        return null;
+                    }
+
+                    parsedSpectraList.Add(new BasicSpectraContainer(sourceName, timeStamp)
+                    {
+                        Name = name,
+                        XAxis = new double[ptsCount],
+                        YAxis = new double[ptsCount],
+                    });
+
+                    // now parse comment
+                    XmlNode comment = spectrum.SelectSingleNode("Comment");
+                    if ((comment is XmlNode) == false) return null;
+                    parsedSpectraList.Last().Comment = comment.InnerText;
+
+                    // and for the last step - validate and parse data points
+                    XmlNode dataPoints = spectrum.SelectSingleNode("DataPoints");
+                    if ((dataPoints is XmlNode) == false) return null;
+                    if (dataPoints.ChildNodes.Count != ptsCount) return null;
+
+                    for(int i = 0; i < ptsCount; i++)
+                    {
+                        string x = dataPoints.ChildNodes[i].Attributes["X"].Value;
+                        string y = dataPoints.ChildNodes[i].Attributes["Y"].Value;
+
+                        if((x is string) && (y is string))
+                        {
+                            parsedSpectraList.Last().XAxis[i] = double.Parse(x);
+                            parsedSpectraList.Last().YAxis[i] = double.Parse(y);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+
+                // if everything went well return the parsed list
+                return parsedSpectraList;
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Save a list of spectra to an XML archive.
         /// </summary>
         /// <param name="spectra">list of spectra</param>
@@ -80,7 +198,7 @@ namespace AnaLight.Tools
             // connect Earth to the Moon
             string xml;
 
-            using (var stringWriter = new StringWriter())
+            using (var stringWriter = new StringWriterUTF8())
             using (var xmlTextWriter = XmlWriter.Create(stringWriter))
             {
                 xmlDocument.WriteTo(xmlTextWriter);

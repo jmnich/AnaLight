@@ -24,18 +24,24 @@ namespace AnaLight.ViewModels
 {
     public class BufferViewerViewModel : TabViewModel
     {
-        public enum BufferViewerMode
-        {
-            ARCHIVE_VIEWER,
-            LIVE_VIEWER,
-        }
-
         #region Properties with INotify interface
+        private bool isViewerInArchiveMode;
+        public bool IsViewerInArchiveMode
+        {
+            get
+            {
+                return isViewerInArchiveMode;
+            }
+            set
+            {
+                isViewerInArchiveMode = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion // Properties with INotify interface
 
         #region Properties - other
         private BufferViewerModel _model;
-        public BufferViewerMode ViewerMode { get; }
         public ObservableCollection<BasicSpectraContainer> Spectra { get; }
         public SeriesCollection ChartSeries;
         #endregion // Properties - other
@@ -47,6 +53,7 @@ namespace AnaLight.ViewModels
         public UniversalCommand EraseBufferCommand { get; private set; }
         public SavePictureCommand SaveChartImageCommand { get; private set; }
         public UniversalCommand SaveAllSpectraCommand { get; private set; }
+        public UniversalCommand LoadArchiveCommand { get; private set; }
         #endregion // Commands
 
         #region Events
@@ -56,7 +63,7 @@ namespace AnaLight.ViewModels
         public BufferViewerViewModel()
         {
             Spectra = new ObservableCollection<BasicSpectraContainer>();
-            ViewerMode = BufferViewerMode.ARCHIVE_VIEWER;
+            IsViewerInArchiveMode = true;
 
             InitializeObject();
         }
@@ -67,11 +74,11 @@ namespace AnaLight.ViewModels
 
             if (spectraList == null)
             {
-                ViewerMode = BufferViewerMode.ARCHIVE_VIEWER;
+                IsViewerInArchiveMode = true;
             }
             else
             {
-                ViewerMode = BufferViewerMode.LIVE_VIEWER;
+                IsViewerInArchiveMode = false;
             }
 
             InitializeObject();
@@ -86,6 +93,7 @@ namespace AnaLight.ViewModels
             SaveChartImageCommand = new SavePictureCommand(OnSaveChartToImageCommand);
             SaveAllSpectraCommand = new UniversalCommand(OnSaveAllSpectraCommand);
             SaveSelectedSpectraToArchiveCommand = new SpectraListCommand(OnSaveSelectedSpectraToArchiveCommand);
+            LoadArchiveCommand = new UniversalCommand(OnLoadArchiveCommand);
 
             ChartSeries = new SeriesCollection();
 
@@ -93,6 +101,32 @@ namespace AnaLight.ViewModels
             {
                 SpectraCountChanged?.Invoke(this, Spectra.Count);
             };
+        }
+
+        private void OnLoadArchiveCommand()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog.Filter = "XML files (*.xml)|*.xml";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var archContent = SpectraArchiveHandler.LoadSpectra(openFileDialog.FileName);
+                
+                if(archContent is List<BasicSpectraContainer>)
+                {
+                    // drop old buffer content
+                    _model.EraseSpectraBuffer();
+                    // load new spectra instead
+                    foreach (var spectrum in archContent)
+                    {
+                        Spectra.Add(spectrum);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error - loading failed");
+                }
+            }
         }
 
         private void OnEraseBufferCommand()
@@ -124,6 +158,8 @@ namespace AnaLight.ViewModels
 
         private void OnSaveSpectraToCSVCommand(List<BasicSpectraContainer> spectra)
         {
+            if (spectra?.Count < 1) return;
+
             var folderBrowser = new BetterFolderBrowser
             {
                 Title = "Select destination folder",
@@ -139,6 +175,8 @@ namespace AnaLight.ViewModels
 
         private void OnSaveAllSpectraCommand()
         {
+            if (Spectra?.Count < 1) return;
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saveFileDialog.Filter = "XML files (*.xml)|*.xml";
@@ -154,6 +192,8 @@ namespace AnaLight.ViewModels
 
         private void OnSaveSelectedSpectraToArchiveCommand(List<BasicSpectraContainer> spectra)
         {
+            if (spectra?.Count < 1) return;
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saveFileDialog.Filter = "XML files (*.xml)|*.xml";

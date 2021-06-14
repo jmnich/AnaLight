@@ -71,7 +71,9 @@
                     Style="{StaticResource DarkButton}" 
                     MaxWidth="160"
                     MaxHeight="60"
-                    FontSize="20"/>
+                    FontSize="20"
+                    IsEnabled="{Binding IsViewerInArchiveMode}"
+                    Command="{Binding LoadArchiveCommand}"/>
 
             <Border Grid.Row="0" Grid.Column="2"
                     Background="Transparent"
