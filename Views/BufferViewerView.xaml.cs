@@ -34,6 +34,8 @@ namespace AnaLight.Views
         {
             InitializeComponent();
             btnSaveCsv.IsEnabled = false;
+            ClearSpectrumInfoBoxes();
+            SetSpectrumInfoBoxesLocked(true);
 
             // whenever spectra are selected send command to load them to the chart area
             bufferContentList.SelectionChanged += (s, p) =>
@@ -60,7 +62,20 @@ namespace AnaLight.Views
                     btnSaveCsv.IsEnabled = false;
                 }
 
+                if(bufferContentList.SelectedItems.Count == 1)
+                {
+                    SetSpectrumInfoBoxesLocked(false);
 
+                    var item = bufferContentList.SelectedItems[0] as BasicSpectraContainer;
+                    txtSpectrumName.Text = item?.Name ?? "---Error---";
+                    txtSpectrumComment.Text = item?.Comment ?? "---Error---";
+                    txtSpectrumSource.Text = item?.SourceName ?? "---Error---";
+                }
+                else
+                {
+                    ClearSpectrumInfoBoxes();
+                    SetSpectrumInfoBoxesLocked(true);
+                }
             };
 
             chartSpectrum.DataClick += OnChartDataClick;
@@ -250,6 +265,32 @@ namespace AnaLight.Views
                         }
                     }
                 }
+            }
+        }
+
+        private void ClearSpectrumInfoBoxes()
+        {
+            txtSpectrumName.Text = "";
+            txtSpectrumComment.Text = "";
+            txtSpectrumSource.Text = "";
+        }
+
+        private void SetSpectrumInfoBoxesLocked(bool locked)
+        {
+            txtSpectrumName.IsReadOnly = locked;
+            txtSpectrumComment.IsReadOnly = locked;
+            btnSaveChanges.IsEnabled = !locked;
+        }
+
+        private void btnSaveChanges_Click(object sender, RoutedEventArgs e)
+        {
+            if (bufferContentList.SelectedItems.Count == 1)
+            {
+                var item = bufferContentList.SelectedItems[0] as BasicSpectraContainer;
+                item.Name = txtSpectrumName.Text;
+                item.Comment = txtSpectrumComment.Text;
+
+                bufferContentList.Items.Refresh();
             }
         }
     }
