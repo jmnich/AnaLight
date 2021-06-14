@@ -32,6 +32,7 @@ namespace AnaLight.Views
         public BufferViewerView() : base("Viewer")
         {
             InitializeComponent();
+            btnSaveCsv.IsEnabled = false;
 
             // whenever spectra are selected send command to load them to the chart area
             bufferContentList.SelectionChanged += (s, p) =>
@@ -49,10 +50,13 @@ namespace AnaLight.Views
                             viewModel.ChangeDisplayedChartsCommand.Execute(items);
                         }
                     }
+
+                    btnSaveCsv.IsEnabled = true;
                 }
                 else
                 {
                     bufferContentList.UnselectAll();
+                    btnSaveCsv.IsEnabled = false;
                 }
 
 
@@ -81,6 +85,9 @@ namespace AnaLight.Views
 
         public void OnChartDataClick(object sender, ChartPoint chartPoint)
         {
+            // FIXME - cursor was annoyingly bad so I disabled it
+            // ... do I even need the cursor...?
+
             //ClearCursorObjects();
 
             //// draw the stupid cursor with coordinates
@@ -150,6 +157,37 @@ namespace AnaLight.Views
         private void OnListViewItemPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void eraseBufferBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // when erase button is clicked don't erase the buffer immediately 
+            // ask user for confirmation first
+            MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure?", "Erase Confirmation", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                var vm = DataContext as BufferViewerViewModel;
+                if(vm?.EraseBufferCommand?.CanExecute(null) ?? false)
+                {
+                    vm.EraseBufferCommand.Execute(null);
+                }
+            }
+        }
+
+        private void btnSaveCsv_Click(object sender, RoutedEventArgs e)
+        {
+            if (bufferContentList.SelectedItems.Count <= 5 && bufferContentList.SelectedItems.Count > 0)
+            {
+                List<BasicSpectraContainer> items = bufferContentList.SelectedItems.Cast<BasicSpectraContainer>().ToList();
+
+                if (DataContext is BufferViewerViewModel viewModel)
+                {
+                    if (viewModel.SaveSpectraToCSVCommand?.CanExecute(null) ?? false)
+                    {
+                        viewModel.SaveSpectraToCSVCommand.Execute(items);
+                    }
+                }
+            }
         }
     }
 }

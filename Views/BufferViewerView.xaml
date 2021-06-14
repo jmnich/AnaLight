@@ -35,6 +35,14 @@
             </Style>
         </Grid.Resources>
 
+        <Button Grid.Row="0" Grid.Column="1" 
+                    x:Name="eraseBufferBtn"
+                    Content="Erase data"
+                    Style="{StaticResource DarkButton}" 
+                    MaxWidth="160"
+                    MaxHeight="60"
+                    FontSize="20" Click="eraseBufferBtn_Click"/>
+
         <Grid Grid.Row="0" Grid.Column="0">
 
             <Grid.RowDefinitions>
@@ -106,7 +114,7 @@
                         Style="{StaticResource DarkButton}"
                         MaxHeight="40"
                         MaxWidth="100"
-                        Content=".CSV"/>
+                        Content=".CSV" Click="btnSaveCsv_Click"/>
 
                 <Button Grid.Row="1" Grid.Column="2"
                         x:Name="btnSavePicture"

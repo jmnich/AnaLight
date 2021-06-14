@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BetterFolderBrowser, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\BetterFolderBrowser.1.2.0\lib\BetterFolderBrowser.dll</HintPath>
+    </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
@@ -47,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -69,13 +73,14 @@
     <Compile Include="Adapters\ISerialSpectraStreamerAdapter.cs" />
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
     <Compile Include="Commands\ConnectToPortCommand.cs" />
-    <Compile Include="Commands\DisplayChartsCommand.cs" />
+    <Compile Include="Commands\SpectraListCommand.cs" />
     <Compile Include="Commands\FreqAndShutterConfigCommand.cs" />
     <Compile Include="Commands\OpenPanelCommand.cs" />
     <Compile Include="Commands\OpenViewerCommand.cs" />
     <Compile Include="Commands\RefreshShutterSettingsCommand.cs" />
     <Compile Include="Containers\BasicSpectraContainer.cs" />
     <Compile Include="Containers\DeviceControlPanelInfo.cs" />
+    <Compile Include="Containers\GearedSpectrumContainer.cs" />
     <Compile Include="Containers\PhysicalDeviceInfo.cs" />
     <Compile Include="Factories\SerialSpectraStreamerFactory.cs" />
     <Compile Include="IDevicePanelRegistrator.cs" />

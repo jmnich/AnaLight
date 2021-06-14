@@ -13,6 +13,9 @@ using LiveCharts.Geared;
 using LiveCharts.Defaults;
 using System.Media;
 using System.Windows.Media;
+using System.Windows.Forms;
+using WK.Libraries.BetterFolderBrowserNS;
+using System.IO;
 
 namespace AnaLight.ViewModels
 {
@@ -35,7 +38,9 @@ namespace AnaLight.ViewModels
         #endregion // Properties - other
 
         #region Commands
-        public DisplayChartsCommand ChangeDisplayedChartsCommand { get; private set; }
+        public SpectraListCommand ChangeDisplayedChartsCommand { get; private set; }
+        public SpectraListCommand SaveSpectraToCSVCommand { get; private set; }
+        public UniversalCommand EraseBufferCommand { get; private set; }
         #endregion // Commands
 
         #region Events
@@ -69,13 +74,20 @@ namespace AnaLight.ViewModels
         private void InitializeObject()
         {
             _model = new BufferViewerModel(Spectra);
-            ChangeDisplayedChartsCommand = new DisplayChartsCommand(OnChangeDisplayedChartsCommand);
+            ChangeDisplayedChartsCommand = new SpectraListCommand(OnChangeDisplayedChartsCommand);
+            SaveSpectraToCSVCommand = new SpectraListCommand(OnSaveSpectraToCSVCommand);
+            EraseBufferCommand = new UniversalCommand(OnEraseBufferCommand);
             ChartSeries = new SeriesCollection();
 
             Spectra.CollectionChanged += (s, p) =>
             {
                 SpectraCountChanged?.Invoke(this, Spectra.Count);
             };
+        }
+
+        private void OnEraseBufferCommand()
+        {
+            _model.EraseSpectraBuffer();
         }
 
         private void OnChangeDisplayedChartsCommand(List<BasicSpectraContainer> spectra)
@@ -104,36 +116,55 @@ namespace AnaLight.ViewModels
             Debug.WriteLine($"Chart has now {ChartSeries.Count} spectra");
         }
 
+        private void OnSaveSpectraToCSVCommand(List<BasicSpectraContainer> spectra)
+        {
+            var folderBrowser = new BetterFolderBrowser
+            {
+                Title = "Select destination folder",
+                RootFolder = "C:\\",
+                Multiselect = false,
+            };
+
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                SaveSpectraToCSV(folderBrowser.SelectedFolder, spectra);    
+            }
+        }
+
+        private void SaveSpectraToCSV(string destinationFolder, List<BasicSpectraContainer> spectra)
+        {
+            foreach(BasicSpectraContainer spectrum in spectra)
+            {
+                // remove signs from spectra name that would be invalid in a file path
+                string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+
+                string fileName = spectrum.Name + ".csv";
+                foreach (char c in fileName)
+                {
+                    if (invalid.Contains(c))
+                    {
+                        fileName = fileName.Replace(c.ToString(), "_");
+                    }
+                }
+
+                // and save
+                string filePath = Path.Combine(destinationFolder, fileName);
+                File.WriteAllText(filePath, BasicSpectraContainer.ConvertToCSV(spectrum));
+            }
+        }
+
         private GLineSeries ConvertSpectrumToSeries(BasicSpectraContainer spectrum)
         {
-            if(spectrum.XAxis.Length != spectrum.YAxis.Length)
+            var ser = new GearedSpectrumContainer(spectrum)
             {
-                Debug.WriteLine("Invalid spectrum!");
-                return null;
-            }
-           
-            ObservablePoint[] points = new ObservablePoint[spectrum.YAxis.Length];
-            for(int i = 0; i < spectrum.YAxis.Length; i++)
-            {
-                points[i] = new ObservablePoint
-                {
-                    X = spectrum.XAxis[i],
-                    Y = spectrum.YAxis[i],
-                };
-            }
+                Fill = Brushes.Transparent,
+                PointGeometry = null,
+                StrokeThickness = 3,
+                Opacity = 0.8,
+                SnapsToDevicePixels = true
+            };
 
-            var ser = new GLineSeries();
-            ser.Title = spectrum.Name;
-            ser.Values = new GearedValues<ObservablePoint>();
-            (ser.Values as GearedValues<ObservablePoint>).WithQuality(Quality.High);
-            ser.Values.AddRange(points);
-            ser.Fill = Brushes.Transparent;
-            ser.PointGeometry = null;
-            ser.StrokeThickness = 3;
-            ser.Opacity = 0.8;
-            ser.SnapsToDevicePixels = true;
-
-            return ser;
+            return (ser as GLineSeries);
         }
 
         #region Model event handlers

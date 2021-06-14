@@ -18,5 +18,10 @@ namespace AnaLight.Models
         {
             ListOfSpectra = listOfSpectra;
         }
+
+        public void EraseSpectraBuffer()
+        {
+            ListOfSpectra.Clear();
+        }
     }
 }

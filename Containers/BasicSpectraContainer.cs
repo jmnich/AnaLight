@@ -67,5 +67,23 @@ namespace AnaLight.Containers
         {
             return name;
         }
+
+        public static string ConvertToCSV(BasicSpectraContainer spectrum)
+        {
+            if (spectrum.XAxis.Length != spectrum.YAxis.Length)
+                throw new ArgumentException("incorrect axis length in spectrum");
+            
+            var builder = new StringBuilder();
+
+            builder.AppendLine("SEP=,");
+            builder.AppendLine("X,Y");
+
+            for(int i = 0; i < spectrum.XAxis.Length; i++)
+            {
+                builder.AppendLine($"{spectrum.XAxis[i]},{spectrum.YAxis[i]}");
+            }
+
+            return builder.ToString();
+        }
     }
 }
