@@ -121,7 +121,7 @@
                         Style="{StaticResource DarkButton}"
                         MaxHeight="40"
                         MaxWidth="100"
-                        Content="Picture"/>
+                        Content="Picture" Click="btnSavePicture_Click"/>
 
                 </Grid>
             </Border>
@@ -203,7 +203,7 @@
                                 Zoom="Xy"
                                 Pan="Xy"
                                 LegendLocation="Left"
-                                Foreground="White">
+                                Foreground="LightGray">
 
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="X" RangeChanged="Axis_RangeChanged"/>

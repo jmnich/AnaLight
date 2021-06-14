@@ -13,9 +13,11 @@ using LiveCharts.Geared;
 using LiveCharts.Defaults;
 using System.Media;
 using System.Windows.Media;
-using System.Windows.Forms;
+using Microsoft.Win32;
 using WK.Libraries.BetterFolderBrowserNS;
 using System.IO;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace AnaLight.ViewModels
 {
@@ -41,6 +43,7 @@ namespace AnaLight.ViewModels
         public SpectraListCommand ChangeDisplayedChartsCommand { get; private set; }
         public SpectraListCommand SaveSpectraToCSVCommand { get; private set; }
         public UniversalCommand EraseBufferCommand { get; private set; }
+        public SavePictureCommand SaveChartImageCommand { get; private set; }
         #endregion // Commands
 
         #region Events
@@ -77,6 +80,7 @@ namespace AnaLight.ViewModels
             ChangeDisplayedChartsCommand = new SpectraListCommand(OnChangeDisplayedChartsCommand);
             SaveSpectraToCSVCommand = new SpectraListCommand(OnSaveSpectraToCSVCommand);
             EraseBufferCommand = new UniversalCommand(OnEraseBufferCommand);
+            SaveChartImageCommand = new SavePictureCommand(OnSaveChartToImageCommand);
             ChartSeries = new SeriesCollection();
 
             Spectra.CollectionChanged += (s, p) =>
@@ -125,7 +129,7 @@ namespace AnaLight.ViewModels
                 Multiselect = false,
             };
 
-            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            if (folderBrowser.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 SaveSpectraToCSV(folderBrowser.SelectedFolder, spectra);    
             }
@@ -164,10 +168,41 @@ namespace AnaLight.ViewModels
                 SnapsToDevicePixels = true
             };
 
-            return (ser as GLineSeries);
+            return ser;
+        }
+
+        private void OnSaveChartToImageCommand(FrameworkElement chart)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            saveFileDialog.Filter = "png files (*.png)|*.png";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                SaveToPng(chart, saveFileDialog.FileName);
+            }
+        }
+
+        private void SaveToPng(FrameworkElement visual, string fileName)
+        {
+            var encoder = new PngBitmapEncoder();
+            EncodeVisual(visual, fileName, encoder);
+        }
+
+        private static void EncodeVisual(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        {
+            var bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            bitmap.Render(visual);
+            var frame = BitmapFrame.Create(bitmap);
+            encoder.Frames.Add(frame);
+
+            using (var stream = File.Create(fileName))
+            {
+                encoder.Save(stream);
+            }
         }
 
         #region Model event handlers
         #endregion // Model event handlers
+
     }
 }

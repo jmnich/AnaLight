@@ -19,6 +19,7 @@ using AnaLight.Containers;
 using AnaLight.ViewModels;
 using LiveCharts;
 using LiveCharts.Dtos;
+using System.IO;
 
 namespace AnaLight.Views
 {
@@ -188,6 +189,19 @@ namespace AnaLight.Views
                     }
                 }
             }
+        }
+
+        private void btnSavePicture_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is BufferViewerViewModel viewModel)
+            {
+                if (viewModel.SaveChartImageCommand?.CanExecute(null) ?? false)
+                {
+                    viewModel.SaveChartImageCommand.Execute(chartSpectrum);
+                }
+            }
+
+            //SaveToPng(chartSpectrum, "chart.png");
         }
     }
 }
