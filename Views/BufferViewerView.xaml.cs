@@ -217,5 +217,40 @@ namespace AnaLight.Views
                 }
             }
         }
+
+        private void eraseSelectedBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (bufferContentList.SelectedItems.Count <= 5 && bufferContentList.SelectedItems.Count > 0)
+            {
+                List<BasicSpectraContainer> items = bufferContentList.SelectedItems.Cast<BasicSpectraContainer>().ToList();
+
+                if (DataContext is BufferViewerViewModel viewModel)
+                {
+                    if (viewModel.EraseSelectedSpectraCommand?.CanExecute(null) ?? false)
+                    {
+                        viewModel.EraseSelectedSpectraCommand.Execute(items);
+                    }
+                }
+            }
+        }
+
+        private void bufferContentList_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                if (bufferContentList.SelectedItems.Count <= 5 && bufferContentList.SelectedItems.Count > 0)
+                {
+                    List<BasicSpectraContainer> items = bufferContentList.SelectedItems.Cast<BasicSpectraContainer>().ToList();
+
+                    if (DataContext is BufferViewerViewModel viewModel)
+                    {
+                        if (viewModel.EraseSelectedSpectraCommand?.CanExecute(null) ?? false)
+                        {
+                            viewModel.EraseSelectedSpectraCommand.Execute(items);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

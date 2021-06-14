@@ -54,6 +54,7 @@ namespace AnaLight.ViewModels
         public SavePictureCommand SaveChartImageCommand { get; private set; }
         public UniversalCommand SaveAllSpectraCommand { get; private set; }
         public UniversalCommand LoadArchiveCommand { get; private set; }
+        public SpectraListCommand EraseSelectedSpectraCommand { get; private set; }
         #endregion // Commands
 
         #region Events
@@ -94,6 +95,7 @@ namespace AnaLight.ViewModels
             SaveAllSpectraCommand = new UniversalCommand(OnSaveAllSpectraCommand);
             SaveSelectedSpectraToArchiveCommand = new SpectraListCommand(OnSaveSelectedSpectraToArchiveCommand);
             LoadArchiveCommand = new UniversalCommand(OnLoadArchiveCommand);
+            EraseSelectedSpectraCommand = new SpectraListCommand(OnEraseSelectedSpectraCommand);
 
             ChartSeries = new SeriesCollection();
 
@@ -132,6 +134,14 @@ namespace AnaLight.ViewModels
         private void OnEraseBufferCommand()
         {
             _model.EraseSpectraBuffer();
+        }
+
+        private void OnEraseSelectedSpectraCommand(List<BasicSpectraContainer> spectra)
+        {
+            foreach(var b in spectra)
+            {
+                Spectra.Remove(b);
+            }
         }
 
         private void OnChangeDisplayedChartsCommand(List<BasicSpectraContainer> spectra)

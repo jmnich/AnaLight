@@ -35,13 +35,35 @@
             </Style>
         </Grid.Resources>
 
-        <Button Grid.Row="0" Grid.Column="1" 
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0"
+                    Margin="5"
                     x:Name="eraseBufferBtn"
-                    Content="Erase data"
+                    Content="Erase all"
+                    Style="{StaticResource DarkButton}" 
+                    MaxWidth="100"
+                    MaxHeight="40"
+                    FontSize="18" 
+                    Click="eraseBufferBtn_Click"/>
+
+            <Button Grid.Row="1"
+                    Margin="3"
+                    x:Name="eraseSelectedBtn"
+                    Content="Erase selected"
                     Style="{StaticResource DarkButton}" 
                     MaxWidth="160"
                     MaxHeight="60"
-                    FontSize="20" Click="eraseBufferBtn_Click"/>
+                    FontSize="18" 
+                    Click="eraseSelectedBtn_Click"/>
+
+        </Grid>
+        
+
 
         <Grid Grid.Row="0" Grid.Column="0">
 
@@ -149,7 +171,8 @@
             <ListView Grid.Row="0"
                       Name="bufferContentList"
                       ItemsSource="{Binding Spectra}"
-                      Background="LightGray">
+                      Background="LightGray" 
+                      PreviewKeyDown="bufferContentList_PreviewKeyDown">
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
@@ -157,15 +180,6 @@
                          Handler="OnListViewItemPreviewMouseRightButtonDown" />
                     </Style>
                 </ListView.ItemContainerStyle>
-
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Rename"/>
-                        <Separator/>
-                        <MenuItem Header="Delete"/>
-                    </ContextMenu>
-                </ListView.ContextMenu>
-
             </ListView>
 
             <TextBlock Grid.Row="1"
