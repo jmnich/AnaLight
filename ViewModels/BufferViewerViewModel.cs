@@ -18,6 +18,7 @@ using WK.Libraries.BetterFolderBrowserNS;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using AnaLight.Tools;
 
 namespace AnaLight.ViewModels
 {
@@ -42,8 +43,10 @@ namespace AnaLight.ViewModels
         #region Commands
         public SpectraListCommand ChangeDisplayedChartsCommand { get; private set; }
         public SpectraListCommand SaveSpectraToCSVCommand { get; private set; }
+        public SpectraListCommand SaveSelectedSpectraToArchiveCommand { get; private set; }
         public UniversalCommand EraseBufferCommand { get; private set; }
         public SavePictureCommand SaveChartImageCommand { get; private set; }
+        public UniversalCommand SaveAllSpectraCommand { get; private set; }
         #endregion // Commands
 
         #region Events
@@ -81,6 +84,9 @@ namespace AnaLight.ViewModels
             SaveSpectraToCSVCommand = new SpectraListCommand(OnSaveSpectraToCSVCommand);
             EraseBufferCommand = new UniversalCommand(OnEraseBufferCommand);
             SaveChartImageCommand = new SavePictureCommand(OnSaveChartToImageCommand);
+            SaveAllSpectraCommand = new UniversalCommand(OnSaveAllSpectraCommand);
+            SaveSelectedSpectraToArchiveCommand = new SpectraListCommand(OnSaveSelectedSpectraToArchiveCommand);
+
             ChartSeries = new SeriesCollection();
 
             Spectra.CollectionChanged += (s, p) =>
@@ -96,8 +102,6 @@ namespace AnaLight.ViewModels
 
         private void OnChangeDisplayedChartsCommand(List<BasicSpectraContainer> spectra)
         {
-            Debug.WriteLine($"Displaying {spectra.Count} spectra");
-
             if(ChartSeries is SeriesCollection seriesCollection)
             {
                 if (seriesCollection.Count > 0)
@@ -116,8 +120,6 @@ namespace AnaLight.ViewModels
                     }
                 }
             }
-
-            Debug.WriteLine($"Chart has now {ChartSeries.Count} spectra");
         }
 
         private void OnSaveSpectraToCSVCommand(List<BasicSpectraContainer> spectra)
@@ -132,6 +134,36 @@ namespace AnaLight.ViewModels
             if (folderBrowser.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 SaveSpectraToCSV(folderBrowser.SelectedFolder, spectra);    
+            }
+        }
+
+        private void OnSaveAllSpectraCommand()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            saveFileDialog.Filter = "XML files (*.xml)|*.xml";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                if(!SpectraArchiveHandler.SaveSpectra(Spectra.ToList(), saveFileDialog.FileName))
+                {
+                    MessageBox.Show("Error - saving failed");
+                }
+
+            }
+        }
+
+        private void OnSaveSelectedSpectraToArchiveCommand(List<BasicSpectraContainer> spectra)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            saveFileDialog.Filter = "XML files (*.xml)|*.xml";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                if (!SpectraArchiveHandler.SaveSpectra(spectra, saveFileDialog.FileName))
+                {
+                    MessageBox.Show("Error - saving failed");
+                }
+
             }
         }
 

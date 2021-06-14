@@ -80,43 +80,52 @@
                     CornerRadius="5"
                     Margin="2,2"
                     Padding="5">
-                
+
                 <Grid>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-                           Text="Save spectrum"
+                    <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                           Text="Save data"
                            Style="{StaticResource DarkTextBlock}"
                            TextWrapping="Wrap"
                            FontSize="18"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
 
-                <Button Grid.Row="1" Grid.Column="0"
+                    <Button Grid.Row="0" Grid.Column="0"
                         x:Name="btnSaveAll"
                         Style="{StaticResource DarkButton}"
                         MaxHeight="40"
                         MaxWidth="100"
-                        Content="Archive all"/>
+                        Content="Archive all"
+                        Command="{Binding SaveAllSpectraCommand}"/>
 
-                <Button Grid.Row="1" Grid.Column="1"
+                    <Button Grid.Row="1" Grid.Column="0"
+                        x:Name="btnSaveSelected"
+                        Style="{StaticResource DarkButton}"
+                        MaxHeight="40"
+                        MaxWidth="100"
+                        Content="Archive" 
+                        Click="btnSaveSelected_Click"/>
+
+                    <Button Grid.Row="1" Grid.Column="1"
                         x:Name="btnSaveCsv"
                         Style="{StaticResource DarkButton}"
                         MaxHeight="40"
                         MaxWidth="100"
                         Content=".CSV" Click="btnSaveCsv_Click"/>
 
-                <Button Grid.Row="1" Grid.Column="2"
+                    <Button Grid.Row="1" Grid.Column="2"
                         x:Name="btnSavePicture"
                         Style="{StaticResource DarkButton}"
                         MaxHeight="40"
@@ -189,7 +198,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                
+
                 <!-- TODO - here goes all the stuff for managing spectra info -->
             </Grid>
 

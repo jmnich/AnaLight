@@ -200,8 +200,22 @@ namespace AnaLight.Views
                     viewModel.SaveChartImageCommand.Execute(chartSpectrum);
                 }
             }
+        }
 
-            //SaveToPng(chartSpectrum, "chart.png");
+        private void btnSaveSelected_Click(object sender, RoutedEventArgs e)
+        {
+            if (bufferContentList.SelectedItems.Count <= 5 && bufferContentList.SelectedItems.Count > 0)
+            {
+                List<BasicSpectraContainer> items = bufferContentList.SelectedItems.Cast<BasicSpectraContainer>().ToList();
+
+                if (DataContext is BufferViewerViewModel viewModel)
+                {
+                    if (viewModel.SaveSelectedSpectraToArchiveCommand?.CanExecute(null) ?? false)
+                    {
+                        viewModel.SaveSelectedSpectraToArchiveCommand.Execute(items);
+                    }
+                }
+            }
         }
     }
 }
