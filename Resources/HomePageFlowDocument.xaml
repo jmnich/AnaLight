@@ -7,45 +7,67 @@
         </Paragraph>
 
         <Paragraph>
-            AnaLight is an open source program created to opearate spectroscopes of different types
+            AnaLight is an open source program created to opearate DIY spectroscopes
             and provide a high level of expandability. 
         </Paragraph>
 
         <Paragraph>
-            The program supports:
+            Current features:
         </Paragraph>
 
         <List>
             <ListItem>
                 <Paragraph>
-                    Interfaces for different spectrometers
+                    Control panel for Alpha Prototype spectrometer with a set of very basic refrective 
+                    optics. 
                 </Paragraph>
             </ListItem>
 
             <ListItem>
                 <Paragraph>
-                    Powerful data archivization tools
-                </Paragraph>
-            </ListItem>
-
-            <ListItem>
-                <Paragraph>
-                    Live spectrum visualization
-                </Paragraph>
-            </ListItem>
-
-            <ListItem>
-                <Paragraph>
-                    Spectrum analysis engine
-                </Paragraph>
-            </ListItem>
-
-            <ListItem>
-                <Paragraph>
-                    Easy-to-use experiment controllers
+                    Spectra viewer panel capable of working in live mode, with attached spectrometer, or in 
+                    archive mode, with offline spectra archives in .XML format.
                 </Paragraph>
             </ListItem>
         </List>
-        
+
+        <Paragraph>
+            <Bold>Current workflow for measurements</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>
+                    Open Live Spectra panel, connect and configure a spectrometer.
+                </Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>
+                    Open viewer panel from inside of the Live Spectra panel instead of from the Home page. 
+                    This will automatically attach the viewer to live results from the control panel. 
+                </Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>
+                    Use the attached viewer panel to browse, archive or export results from the spectrometer.
+                </Paragraph>
+            </ListItem>
+        </List>
+
+        <Paragraph>
+            <Bold>Current workflow for archived results</Bold>
+        </Paragraph>
+        <List>
+            <ListItem>
+                <Paragraph>
+                    Open Spectra Viewer panel from the home page and load archive file.
+                </Paragraph>
+            </ListItem>
+            <ListItem>
+                <Paragraph>
+                    Use the viewer panel to browse, analyze, export and delete spectra. Results can be 
+                    saved to a new archive.
+                </Paragraph>
+            </ListItem>
+        </List>
     </FlowDocument>
 </ResourceDictionary>
