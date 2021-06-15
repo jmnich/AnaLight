@@ -80,12 +80,12 @@
     <Compile Include="Commands\OpenViewerCommand.cs" />
     <Compile Include="Commands\RefreshShutterSettingsCommand.cs" />
     <Compile Include="Containers\BasicSpectraContainer.cs" />
-    <Compile Include="Containers\DeviceControlPanelInfo.cs" />
+    <Compile Include="Containers\PanelInfo.cs" />
     <Compile Include="Containers\GearedSpectrumContainer.cs" />
     <Compile Include="Containers\PhysicalDeviceInfo.cs" />
     <Compile Include="Factories\SerialSpectraStreamerFactory.cs" />
-    <Compile Include="IDevicePanelRegistrator.cs" />
-    <Compile Include="Factories\DeviceControlPanelFactory.cs" />
+    <Compile Include="IPanelRegistrator.cs" />
+    <Compile Include="Factories\PanelFactory.cs" />
     <Compile Include="Factories\PhysicalDeviceInfoFactory.cs" />
     <Compile Include="Models\BasicLiveSpectraModel.cs" />
     <Compile Include="Models\BufferViewerModel.cs" />

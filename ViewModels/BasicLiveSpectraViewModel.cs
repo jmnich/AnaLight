@@ -168,7 +168,7 @@ namespace AnaLight.ViewModels
         public OpenViewerCommand OpenViewerPanelCommand { get; }
         #endregion // Commands
 
-        public BasicLiveSpectraViewModel(DeviceControlPanelFactory panelFactory)
+        public BasicLiveSpectraViewModel(PanelFactory panelFactory)
         {
             ChartValues = new GearedValues<ObservablePoint>();
             ChartValues.WithQuality(Quality.Medium);

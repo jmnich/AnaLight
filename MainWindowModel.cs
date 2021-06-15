@@ -10,17 +10,17 @@ using AnaLight.Factories;
 
 namespace AnaLight
 {
-    public class MainWindowModel : IDevicePanelRegistrator
+    public class MainWindowModel : IPanelRegistrator
     {
         private MainWindow MainWindow { get; }
         private MainWindowViewModel MainWindowViewModel { get; }
         private ObservableCollection<TabBase> Tabs { get; }
-        private DeviceControlPanelFactory PanelFactory { get; }
+        private PanelFactory PanelFactory { get; }
 
         public MainWindowModel(MainWindow window)
         {
             Tabs = new ObservableCollection<TabBase>();
-            PanelFactory = new DeviceControlPanelFactory(this);
+            PanelFactory = new PanelFactory(this);
 
             // initialize MVVM objects for the main window
             MainWindowViewModel = new MainWindowViewModel
@@ -32,7 +32,7 @@ namespace AnaLight
             MainWindow.DataContext = MainWindowViewModel;
 
             // create the home panel tab
-            PanelFactory.CreatePanel(DeviceControlPanelType.HOME);
+            PanelFactory.CreatePanel(PanelType.HOME);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace AnaLight
         /// <summary>
         /// Register a new tab so that it can be navigated to through the main window
         /// </summary>
-        public void RegisterNewDevicePanel(TabBase tabBase)
+        public void RegisterNewPanel(TabBase tabBase)
         {
             Tabs.Add(tabBase);
         }

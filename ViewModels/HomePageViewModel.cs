@@ -37,7 +37,12 @@ namespace AnaLight.ViewModels
         /// <summary>
         /// A list of available device control panel types.
         /// </summary>
-        public ObservableCollection<DeviceControlPanelInfo> AvailableControlPanels { get; }
+        public ObservableCollection<PanelInfo> AvailableControlPanels { get; }
+
+        /// <summary>
+        /// A list of available utility panel types.
+        /// </summary>
+        public ObservableCollection<PanelInfo> AvailableUtilityPanels { get; }
 
         #endregion // Properties
 
@@ -54,7 +59,8 @@ namespace AnaLight.ViewModels
         {
             Model = new Models.HomePageModel();
 
-            AvailableControlPanels = DeviceControlPanelFactory.AvailableControlPanels;
+            AvailableControlPanels = PanelFactory.AvailableControlPanels;
+            AvailableUtilityPanels = PanelFactory.AvailableUtilityPanels;
         }
         #endregion // Constructor
     }

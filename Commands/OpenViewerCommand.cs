@@ -15,9 +15,9 @@ namespace AnaLight.Commands
         public event EventHandler CanExecuteChanged;
 
         private ObservableCollection<BasicSpectraContainer> _spectra;
-        private DeviceControlPanelFactory _factory;
+        private PanelFactory _factory;
 
-        public OpenViewerCommand(ObservableCollection<BasicSpectraContainer> spectraList, DeviceControlPanelFactory panelFactory)
+        public OpenViewerCommand(ObservableCollection<BasicSpectraContainer> spectraList, PanelFactory panelFactory)
         {
             _spectra = spectraList;
             _factory = panelFactory;
@@ -32,7 +32,7 @@ namespace AnaLight.Commands
         {
             if(CanExecute(parameter))
             {
-                _factory.CreatePanel(DeviceControlPanelType.BUFFER_VIEWER, _spectra as object);
+                _factory.CreatePanel(PanelType.BUFFER_VIEWER, _spectra as object);
             }
         }
     }

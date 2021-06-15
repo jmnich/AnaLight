@@ -9,11 +9,11 @@ namespace AnaLight.Commands
 {
     public class OpenPanelCommand : ICommand
     {
-        private Factories.DeviceControlPanelFactory DeviceControlPanelFactory { get; }
-        private Factories.DeviceControlPanelType PanelType { get; }
+        private Factories.PanelFactory DeviceControlPanelFactory { get; }
+        private Factories.PanelType PanelType { get; }
 
-        public OpenPanelCommand(Factories.DeviceControlPanelFactory deviceControlPanelFactory, 
-            Factories.DeviceControlPanelType panelType)
+        public OpenPanelCommand(Factories.PanelFactory deviceControlPanelFactory, 
+            Factories.PanelType panelType)
         {
             DeviceControlPanelFactory = deviceControlPanelFactory;
             PanelType = panelType;

@@ -8,17 +8,17 @@ using AnaLight.Factories;
 
 namespace AnaLight.Containers
 {
-    public class DeviceControlPanelInfo
+    public class PanelInfo
     {
         public String PanelName
         {
             get
             {
-                return DeviceControlPanelFactory.ConvertControlPanelTypeToString(PanelType);
+                return PanelFactory.ConvertControlPanelTypeToString(PanelType);
             }
         }
 
-        public DeviceControlPanelType PanelType { get; set; }
+        public PanelType PanelType { get; set; }
         public String PanelDescription { get; set; }
         public PhysicalDeviceInfo[] SupportedDevices { get; set; }
         public ICommand OpenPanelCommand { get; set; }

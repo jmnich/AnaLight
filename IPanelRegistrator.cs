@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AnaLight
 {
-    public interface IDevicePanelRegistrator
+    public interface IPanelRegistrator
     {
-        void RegisterNewDevicePanel(TabBase tabBase);
+        void RegisterNewPanel(TabBase tabBase);
         void OnPanelCloseRequest(object sender, string header);
     }
 }
