@@ -197,13 +197,6 @@
                       ItemsSource="{Binding Spectra, UpdateSourceTrigger=PropertyChanged}"
                       Background="LightGray" 
                       PreviewKeyDown="bufferContentList_PreviewKeyDown">
-
-                <!--<ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <EventSetter Event="PreviewMouseRightButtonDown"
-                         Handler="OnListViewItemPreviewMouseRightButtonDown" />
-                    </Style>
-                </ListView.ItemContainerStyle>-->
             </ListView>
 
             <TextBlock Grid.Row="1"
@@ -219,14 +212,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
@@ -253,31 +247,44 @@
 
             </DockPanel>
 
-
-            <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                       Margin="1,5">
-
-                <TextBlock Style="{StaticResource DarkTextBlock}"
-                       DockPanel.Dock="Top"
+            <TextBlock Grid.Row="1" Grid.Column="0" 
+                       Style="{StaticResource DarkTextBlock}"
                        Text="Source"
                        FontSize="14"
-                       Margin="2"
+                       HorizontalAlignment="Left"
+                       Margin="2,3,5,3"
                        TextWrapping="Wrap"/>
 
-                <TextBox  DockPanel.Dock="Bottom"
-                     x:Name="txtSpectrumSource"
-                     Style="{StaticResource DarkTextBox}"
-                     HorizontalAlignment="Stretch"
-                     FontSize="14"
-                     IsReadOnly="True"
-                     TextWrapping="Wrap"
-                     CaretBrush="White"
-                     Foreground="White"/>          
-            </DockPanel>
+            <TextBox  Grid.Row="1" Grid.Column="1"
+                      x:Name="txtSpectrumSource"
+                      Style="{StaticResource DarkTextBox}"
+                      FontSize="14"
+                      IsReadOnly="True"
+                      TextWrapping="Wrap"
+                      CaretBrush="White"
+                      Foreground="White"
+                      Margin="1"/>
 
-            
-            <DockPanel Grid.Row="2" Grid.RowSpan="2" 
-                        Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Grid.Row="2" Grid.Column="0" 
+                       Margin="2,3,5,3" 
+                       HorizontalAlignment="Left"
+                       Style="{StaticResource DarkTextBlock}"
+                       Text="Time"
+                       FontSize="14"
+                       TextWrapping="Wrap"/>
+
+            <TextBox  Grid.Row="2" Grid.Column="1"
+                      x:Name="txtSpectrumTime"
+                      Style ="{StaticResource DarkTextBox}"
+                      FontSize="14"
+                      IsReadOnly="True"
+                      TextWrapping="Wrap"
+                      CaretBrush="White"
+                      Foreground="White"
+                      Margin="1"/>
+
+            <DockPanel Grid.Row="3" Grid.RowSpan="2" 
+                       Grid.Column="0" Grid.ColumnSpan="2">
 
                 <TextBlock DockPanel.Dock="Top"
                            Style="{StaticResource DarkTextBlock}"
@@ -300,7 +307,7 @@
             </DockPanel>
 
 
-            <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+            <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
                     x:Name="btnSaveChanges"
                     Style="{StaticResource DarkButton}"
                     MaxHeight="45"

@@ -64,12 +64,20 @@ namespace AnaLight.Views
 
                 if(bufferContentList.SelectedItems.Count == 1)
                 {
-                    SetSpectrumInfoBoxesLocked(false);
-
                     var item = bufferContentList.SelectedItems[0] as BasicSpectraContainer;
-                    txtSpectrumName.Text = item?.Name ?? "---Error---";
-                    txtSpectrumComment.Text = item?.Comment ?? "---Error---";
-                    txtSpectrumSource.Text = item?.SourceName ?? "---Error---";
+
+                    if (item is BasicSpectraContainer)
+                    {
+                        SetSpectrumInfoBoxesLocked(false);
+                        txtSpectrumName.Text = item.Name;
+                        txtSpectrumComment.Text = item.Comment;
+                        txtSpectrumSource.Text = item.SourceName;
+                        txtSpectrumTime.Text = $"{item.TimeStamp:dd.MM.yyyy HH:mm:ss.fff}";
+                    }
+                    else
+                    {
+                        txtSpectrumName.Text = "---ERROR---";
+                    }
                 }
                 else
                 {
@@ -273,6 +281,7 @@ namespace AnaLight.Views
             txtSpectrumName.Text = "";
             txtSpectrumComment.Text = "";
             txtSpectrumSource.Text = "";
+            txtSpectrumTime.Text = "";
         }
 
         private void SetSpectrumInfoBoxesLocked(bool locked)

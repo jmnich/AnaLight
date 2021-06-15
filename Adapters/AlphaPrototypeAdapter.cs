@@ -208,6 +208,7 @@ namespace AnaLight.Adapters
                         YAxis = y,
                     };
                     spectra.Name = $"{spectra.TimeStamp:dd.MM HH:mm:ss.fff}";
+                    spectra.Comment = "";
                     
                     NewSpectraAvailable?.Invoke(this, spectra);
                 }
