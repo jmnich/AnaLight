@@ -67,7 +67,7 @@ namespace AnaLight.Adapters
                 case 1.0:
                 case 0.5:
                     {
-                        return new int[] { 1, 2, 5, 10, 50, 100 };
+                        return new int[] { 1, 2, 5, 10, 20, 30, 40};
                     }
 
                 case 0.2:
@@ -75,7 +75,7 @@ namespace AnaLight.Adapters
                 case 0.033:
                 case 0.017:
                     {
-                        return new int[] { 1, 2, 5, 10 };
+                        return new int[] { 1, 2, 5, 10, 20, 30, 40, 50, 100};
                     }
 
                 default:
