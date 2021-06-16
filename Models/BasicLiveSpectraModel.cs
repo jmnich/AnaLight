@@ -15,7 +15,7 @@ namespace AnaLight.Models
 {
     public class BasicLiveSpectraModel
     {
-        private ISerialSpectraStreamerAdapter Adapter { get; set; }
+        public ISerialSpectraStreamerAdapter Adapter { get; private set; }
 
         public ObservableCollection<BasicSpectraContainer> SpectraList { get; }
 
@@ -99,6 +99,16 @@ namespace AnaLight.Models
             return Adapter?.SupportedFrequencies ?? new double[0];
         }
 
+        public List<string> GetAvailableTriggerSettings()
+        {
+            return Adapter?.SupportedTriggerModes ?? new List<string>();
+        }
+
+        public string GetDefaultTriggerSetting()
+        {
+            return Adapter?.DefaultTriggerMode ?? "";
+        }
+
         public void SendConfigurationCommand(double frequency, int shutter)
         {
             // validate arguments
@@ -115,7 +125,7 @@ namespace AnaLight.Models
             }
 
             // pass values to the adapter
-            Adapter?.TransmitConfigurationCommand(frequency, shutter);
+            Adapter?.ConfigureAcquisitionSettings(frequency, shutter);
         }
 
         public int[] GetAvailableShutterSettings(double frequency)

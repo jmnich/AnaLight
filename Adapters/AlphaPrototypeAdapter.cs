@@ -34,6 +34,10 @@ namespace AnaLight.Adapters
             }
         }
 
+        public TriggerModes CurrentTriggerMode { get; private set; }
+        public List<string> SupportedTriggerModes => Enum.GetNames(typeof(TriggerModes)).ToList();
+        public string DefaultTriggerMode => SupportedTriggerModes[0];
+
         private byte[] singleFrameBuffer;
 
         private DateTime _lastDataPacketTimeStamp;
@@ -50,6 +54,7 @@ namespace AnaLight.Adapters
         {
             ContinueReceiving = false;
             singleFrameBuffer = new byte[0];
+            CurrentTriggerMode = (TriggerModes)Enum.Parse(typeof(TriggerModes), DefaultTriggerMode);
         }
 
         private SerialPort _serialPort;
@@ -130,7 +135,7 @@ namespace AnaLight.Adapters
             ContinueReceiving = _Enbaled;
         }
 
-        public void TransmitConfigurationCommand(double frequency, int shutterSetting)
+        public void ConfigureAcquisitionSettings(double frequency, int shutterSetting)
         {
             if(SupportedFrequencies.Contains(frequency) && SupportedShutterSettingsForFrequency(frequency).Contains(shutterSetting))
             {
@@ -215,27 +220,22 @@ namespace AnaLight.Adapters
             }
         }
 
+        public void TriggerOnce()
+        {
+            // TODO
+        }
+
+        public void ConfigureTriggerSettings(string triggerSetting)
+        {
+            // TODO
+
+            CurrentTriggerMode = (TriggerModes)Enum.Parse(typeof(TriggerModes), triggerSetting);
+        }
+
         private void AssembleConfigurationCommand(double frequency, int shutter, out byte[] cmdHeader, out byte[] cmdPayload)
         {
-            byte[] header = new byte[16];
+            byte[] header = AssembleHeader(100, 8, 0);
             byte[] payload = new byte[8];
-
-            UInt32 cmdId = 100;
-            UInt32 payloadSize = 8;
-            UInt32 payloadCRC = 0;
-            UInt32 headerCRC = 0;
-
-            // horrible parsing
-            var h1 = BitConverter.GetBytes(cmdId);
-            var h2 = BitConverter.GetBytes(payloadSize);
-            var h3 = BitConverter.GetBytes(payloadCRC);
-            var h4 = BitConverter.GetBytes(headerCRC);
-
-            // this makes me sick
-            Array.Copy(h1, 0, header, 0, 4);
-            Array.Copy(h2, 0, header, 4, 4);
-            Array.Copy(h3, 0, header, 8, 4);
-            Array.Copy(h4, 0, header, 12, 4);
 
             // so terrible
             int fIndex = Array.IndexOf(SupportedFrequencies, frequency);
@@ -249,6 +249,25 @@ namespace AnaLight.Adapters
 
             cmdHeader = header;
             cmdPayload = payload;
+        }
+
+        private byte[] AssembleHeader(UInt32 id, UInt32 payloadSize, UInt32 payloadCRC)
+        {
+            byte[] h = new byte[16];
+
+            // horrible parsing
+            var h1 = BitConverter.GetBytes(id);
+            var h2 = BitConverter.GetBytes(payloadSize);
+            var h3 = BitConverter.GetBytes(payloadCRC);
+            var h4 = BitConverter.GetBytes(0);
+
+            // this makes me sick
+            Array.Copy(h1, 0, h, 0, 4);
+            Array.Copy(h2, 0, h, 4, 4);
+            Array.Copy(h3, 0, h, 8, 4);
+            Array.Copy(h4, 0, h, 12, 4);
+
+            return h;
         }
     }
 }

@@ -16,12 +16,55 @@ using AnaLight.Commands;
 using AnaLight.Factories;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using AnaLight.Adapters;
 
 namespace AnaLight.ViewModels
 {
     public class BasicLiveSpectraViewModel : TabViewModel
     {
         #region Properties with INotify interface
+
+        private Visibility _triggerButtonVisible;
+        public Visibility TriggerButtonVisible
+        {
+            set
+            {
+                _triggerButtonVisible = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _triggerButtonVisible;
+            }
+        }
+
+        private Visibility _freezeButtonVisible;
+        public Visibility FreezeButtonVisible
+        {
+            set
+            {
+                _freezeButtonVisible = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _freezeButtonVisible;
+            }
+        }
+
+        private bool _triggerButtonEnabled;
+        public bool TriggerButtonEnabled
+        {
+            get
+            {
+                return _triggerButtonEnabled;
+            }
+            set
+            {
+                _triggerButtonEnabled = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _comSelectionComboEnabled;
         public bool COMSelectionComboEnabled
@@ -147,6 +190,8 @@ namespace AnaLight.ViewModels
         public ObservableCollection<string> Ports { get; }
         public ObservableCollection<double> FrequencySettings { get; }
         public ObservableCollection<int> ShutterSettings { get; }
+        public ObservableCollection<string> TriggerSettings { get; }
+        public string DefaultTriggerSetting { get; }
 
         public ObservableCollection<BasicSpectraContainer> SavedSpectra
         {
@@ -160,13 +205,17 @@ namespace AnaLight.ViewModels
         #region Commands
 
         public UniversalCommand RefreshPortsCommand { get; }
-        public ConnectToPortCommand ConnectToCOMCommand { get; }
+        public StringCommand ConnectToCOMCommand { get; }
         public UniversalCommand DisconnectPortCommand { get; }
         public UniversalCommand FreezeStreamSwitchCommand { get; }
         public RefreshShutterSettingsCommand RefreshShutterCommand { get; }
         public FreqAndShutterConfigCommand FreqAndShutterCommand { get; }
         public OpenViewerCommand OpenViewerPanelCommand { get; }
+        public StringCommand TriggerSettingCommand { get; }
+        public UniversalCommand SingleTriggerCommand { get; }
         #endregion // Commands
+
+        private bool _awaitingForTransmissionAfterTrigger = false;
 
         public BasicLiveSpectraViewModel(PanelFactory panelFactory)
         {
@@ -179,21 +228,25 @@ namespace AnaLight.ViewModels
             _model.PortDisconnected += OnDisconnectedFromPort;
 
             RefreshPortsCommand = new UniversalCommand(OnRefreshPortsCommand);
-            ConnectToCOMCommand = new ConnectToPortCommand(OnConnectToCOMCommand);
+            ConnectToCOMCommand = new StringCommand(OnConnectToCOMCommand);
             DisconnectPortCommand = new UniversalCommand(OnDisconnectPortCommand);
             FreezeStreamSwitchCommand = new UniversalCommand(OnAcquisitionFreezeSwitchCommand);
             RefreshShutterCommand = new RefreshShutterSettingsCommand(OnRefreshShutterSettingsCommand);
             FreqAndShutterCommand = new FreqAndShutterConfigCommand(OnFreqAndShSettingsConfigCommand);
             OpenViewerPanelCommand = new OpenViewerCommand(SavedSpectra, panelFactory);
+            TriggerSettingCommand = new StringCommand(OnTriggerSettingCommand);
+            SingleTriggerCommand = new UniversalCommand(OnSingleTriggerCommand);
 
             Ports = new ObservableCollection<string>();
-            FrequencySettings = new ObservableCollection<double>();
+            FrequencySettings = new ObservableCollection<double>(_model.GetAvailableFrequencySettings());
             ShutterSettings = new ObservableCollection<int>();
+            TriggerSettings = new ObservableCollection<string>(_model.GetAvailableTriggerSettings());
+            DefaultTriggerSetting = _model.GetDefaultTriggerSetting();
 
             COMSelectionComboEnabled = true;
             ConfigurationButtonEnabled = false;
 
-            FrequencySettings = new ObservableCollection<double>(_model.GetAvailableFrequencySettings());
+            OnTriggerSettingCommand(_model.Adapter.DefaultTriggerMode);
 
             SaveReceivedSpectra = false;
         }
@@ -222,6 +275,12 @@ namespace AnaLight.ViewModels
                         MaxPointIndex = i;
                     }
                 }
+
+                if(_awaitingForTransmissionAfterTrigger)
+                {
+                    _awaitingForTransmissionAfterTrigger = false;
+                    TriggerButtonEnabled = true;
+                }
             });
         }
 
@@ -238,6 +297,45 @@ namespace AnaLight.ViewModels
         #endregion // Model event handlers
 
         #region Command handlers
+        private void OnTriggerSettingCommand(string s)
+        {
+            Debug.WriteLine(s);
+
+            _model.Adapter.ConfigureTriggerSettings(s);
+
+            if(_model.Adapter.CurrentTriggerMode == TriggerModes.AUTO)
+            {
+                FreezeButtonVisible = Visibility.Visible;
+                TriggerButtonVisible = Visibility.Hidden;
+                TriggerButtonEnabled = false;
+                Debug.WriteLine("auto");
+            }
+            else if(_model.Adapter.CurrentTriggerMode == TriggerModes.SINGLE)
+            {
+                FreezeButtonVisible = Visibility.Hidden;
+                TriggerButtonVisible = Visibility.Visible;
+                TriggerButtonEnabled = true;
+                Debug.WriteLine("single");
+            }
+            else
+            {
+                FreezeButtonVisible = Visibility.Hidden;
+                TriggerButtonVisible = Visibility.Hidden;
+                TriggerButtonEnabled = false;
+                Debug.WriteLine("ext");
+            }
+        }
+
+        private void OnSingleTriggerCommand()
+        {
+            if(_model.Adapter.CurrentTriggerMode == TriggerModes.SINGLE)
+            {
+                _model.Adapter.TriggerOnce();
+                _awaitingForTransmissionAfterTrigger = true;
+                TriggerButtonEnabled = false;
+            }
+        }
+
         private void OnRefreshPortsCommand()
         {
             Ports.Clear();

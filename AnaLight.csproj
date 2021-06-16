@@ -72,7 +72,7 @@
     <Compile Include="Adapters\AlphaPrototypeAdapter.cs" />
     <Compile Include="Adapters\ISerialSpectraStreamerAdapter.cs" />
     <Compile Include="Commands\ChangeSelectedTabCommand.cs" />
-    <Compile Include="Commands\ConnectToPortCommand.cs" />
+    <Compile Include="Commands\StringCommand.cs" />
     <Compile Include="Commands\SavePictureCommand.cs" />
     <Compile Include="Commands\SpectraListCommand.cs" />
     <Compile Include="Commands\FreqAndShutterConfigCommand.cs" />

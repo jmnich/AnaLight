@@ -7,13 +7,13 @@ using System.Windows.Input;
 
 namespace AnaLight.Commands
 {
-    public class ConnectToPortCommand : ICommand
+    public class StringCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
-        public delegate void COMConnectionHandler(string COM);
+        public delegate void StringHandler(string param);
 
-        public COMConnectionHandler Handler { get; }
+        public StringHandler Handler { get; }
 
         private bool canExecuteProperty;
         public bool CanExecuteProperty
@@ -29,7 +29,7 @@ namespace AnaLight.Commands
             }
         }
 
-        public ConnectToPortCommand(COMConnectionHandler aHandler)
+        public StringCommand(StringHandler aHandler)
         {
             Handler = aHandler;
             CanExecuteProperty = true;

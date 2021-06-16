@@ -99,8 +99,36 @@
                     FontSize="20"
                     Margin="20,5,5,5"
                     IsEnabled="{Binding DisconnectButtonEnabled}"
-                    Command="{Binding FreezeStreamSwitchCommand}"/>
-            
+                    Command="{Binding FreezeStreamSwitchCommand}"
+                    Visibility="{Binding FreezeButtonVisible, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+            <StackPanel Orientation="Vertical"
+                        Margin="25,5,5,5">
+
+                <TextBlock Text="Select Trigger mode"
+                           TextWrapping="Wrap"
+                           Style="{StaticResource DarkTextBlock}"/>
+
+                <ComboBox x:Name="TriggerCombo"
+                      ItemsSource="{Binding TriggerSettings}"
+                      IsEnabled="{Binding DisconnectButtonEnabled}"
+                      HorizontalAlignment="Left"
+                      MinWidth="100"
+                      IsSynchronizedWithCurrentItem="True"
+                      SelectedIndex="0" SelectionChanged="TriggerCombo_SelectionChanged"/>
+            </StackPanel>
+
+            <Button x:Name="BtnSingleTrigger"
+                    Content="Trigger"
+                    Style="{StaticResource DarkButton}"
+                    MaxWidth="150"
+                    MaxHeight="60"
+                    FontSize="20"
+                    Margin="5"
+                    IsEnabled="{Binding TriggerButtonEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Visibility="{Binding TriggerButtonVisible}"
+                    Command="{Binding SingleTriggerCommand}"/>
+
         </WrapPanel>
 
         <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="6"

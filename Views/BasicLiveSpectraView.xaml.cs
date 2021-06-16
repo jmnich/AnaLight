@@ -239,5 +239,21 @@ namespace AnaLight.Views
                 MessageBox.Show("Select frequency and shutter settings first!");
             }
         }
+
+        // act on a new trigger setting selection
+        private void TriggerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(DataContext is BasicLiveSpectraViewModel viewModel)
+            {
+                if(viewModel.TriggerSettingCommand?.CanExecute(null) ?? false)
+                {
+                    viewModel.TriggerSettingCommand.Execute(TriggerCombo.SelectedItem);
+
+                    // for some reason visibility does not bind politely
+                    BtnFreeze.Visibility = viewModel.FreezeButtonVisible;
+                    BtnSingleTrigger.Visibility = viewModel.TriggerButtonVisible;
+                }
+            }
+        }
     }
 }
