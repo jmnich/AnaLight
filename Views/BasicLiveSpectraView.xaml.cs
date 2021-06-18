@@ -1,12 +1,14 @@
 ﻿using AnaLight.ViewModels;
 using LiveCharts;
 using LiveCharts.Defaults;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AnaLight.Views
 {
@@ -99,6 +101,29 @@ namespace AnaLight.Views
             };
 
             // refresh calculated period and exposure whenever a new shutter setting is selected
+            var dt = new DispatcherTimer(DispatcherPriority.Send);
+            dt.Tick += (s, e) =>
+            {
+                dt.Stop();
+                // this must be done after a short delay to avoid sending command during initialization
+                TriggerCombo.SelectionChanged += (sender, param) =>
+                {
+                    if (DataContext is BasicLiveSpectraViewModel viewModel)
+                    {
+                        if (viewModel.TriggerSettingCommand?.CanExecute(null) ?? false)
+                        {
+                            viewModel.TriggerSettingCommand.Execute(TriggerCombo.SelectedItem);
+
+                            // for some reason visibility does not bind politely
+                            BtnFreeze.Visibility = viewModel.FreezeButtonVisible;
+                            BtnSingleTrigger.Visibility = viewModel.TriggerButtonVisible;
+                        }
+                    }
+                };
+            };
+            dt.Interval = TimeSpan.FromMilliseconds(200);
+            dt.Start();
+
             ShutterCombo.SelectionChanged += (sender, param) =>
             {
                 var viewModel = DataContext as BasicLiveSpectraViewModel;
@@ -241,19 +266,19 @@ namespace AnaLight.Views
         }
 
         // act on a new trigger setting selection
-        private void TriggerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if(DataContext is BasicLiveSpectraViewModel viewModel)
-            {
-                if(viewModel.TriggerSettingCommand?.CanExecute(null) ?? false)
-                {
-                    viewModel.TriggerSettingCommand.Execute(TriggerCombo.SelectedItem);
+        //private void TriggerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if(DataContext is BasicLiveSpectraViewModel viewModel)
+        //    {
+        //        if(viewModel.TriggerSettingCommand?.CanExecute(null) ?? false)
+        //        {
+        //            viewModel.TriggerSettingCommand.Execute(TriggerCombo.SelectedItem);
 
-                    // for some reason visibility does not bind politely
-                    BtnFreeze.Visibility = viewModel.FreezeButtonVisible;
-                    BtnSingleTrigger.Visibility = viewModel.TriggerButtonVisible;
-                }
-            }
-        }
+        //            // for some reason visibility does not bind politely
+        //            BtnFreeze.Visibility = viewModel.FreezeButtonVisible;
+        //            BtnSingleTrigger.Visibility = viewModel.TriggerButtonVisible;
+        //        }
+        //    }
+        //}
     }
 }

@@ -17,6 +17,7 @@ using AnaLight.Factories;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using AnaLight.Adapters;
+using System.Windows.Threading;
 
 namespace AnaLight.ViewModels
 {
@@ -246,7 +247,10 @@ namespace AnaLight.ViewModels
             COMSelectionComboEnabled = true;
             ConfigurationButtonEnabled = false;
 
-            OnTriggerSettingCommand(_model.Adapter.DefaultTriggerMode);
+            // configure the interface for a single trigger mode
+            FreezeButtonVisible = Visibility.Hidden;
+            TriggerButtonVisible = Visibility.Visible;
+            TriggerButtonEnabled = true;
 
             SaveReceivedSpectra = false;
         }
@@ -279,7 +283,16 @@ namespace AnaLight.ViewModels
                 if(_awaitingForTransmissionAfterTrigger)
                 {
                     _awaitingForTransmissionAfterTrigger = false;
-                    TriggerButtonEnabled = true;
+
+                    var dt = new DispatcherTimer(DispatcherPriority.Send);
+                    dt.Tick += (s, e) =>
+                    {
+                        // this seems to work better with this delay, not sure why
+                        dt.Stop();
+                        TriggerButtonEnabled = true;
+                    };
+                    dt.Interval = TimeSpan.FromMilliseconds(300);
+                    dt.Start();
                 }
             });
         }
@@ -287,12 +300,14 @@ namespace AnaLight.ViewModels
         private void OnConnectedToPort(object sender, string port)
         {
             COMSelectionComboEnabled = false;
+            TriggerButtonEnabled = true;
         }
 
         private void OnDisconnectedFromPort(object sender, object arg)
         {
             COMSelectionComboEnabled = true;
             AcquisitionFrozen = false;
+            TriggerButtonEnabled = false;
         }
         #endregion // Model event handlers
 

@@ -135,29 +135,6 @@ namespace AnaLight.Adapters
             ContinueReceiving = _Enbaled;
         }
 
-        public void ConfigureAcquisitionSettings(double frequency, int shutterSetting)
-        {
-            if(SupportedFrequencies.Contains(frequency) && SupportedShutterSettingsForFrequency(frequency).Contains(shutterSetting))
-            {
-                AssembleConfigurationCommand(frequency, shutterSetting, out byte[] header, out byte[] payload);
-
-                // transmit header
-                _serialPort?.Write(header, 0, header.Length);
-                Debug.WriteLine($"Stamp 1 {DateTime.Now:O}");
-
-                // transmit paylod with delay
-                Task.Delay(10).ContinueWith(_ =>
-                {
-                    _serialPort?.Write(payload, 0, payload.Length);
-                    Debug.WriteLine($"Stamp 2 {DateTime.Now:O}");
-                });
-            }
-            else
-            {
-                Debug.WriteLine("Incorrect configuration requested");
-            }
-        }
-
         private void OnDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             // read available bytes from the serial port
@@ -220,16 +197,77 @@ namespace AnaLight.Adapters
             }
         }
 
+        public void ConfigureAcquisitionSettings(double frequency, int shutterSetting)
+        {
+            if (SupportedFrequencies.Contains(frequency) && SupportedShutterSettingsForFrequency(frequency).Contains(shutterSetting))
+            {
+                AssembleConfigurationCommand(frequency, shutterSetting, out byte[] header, out byte[] payload);
+
+                // transmit header
+                _serialPort?.Write(header, 0, header.Length);
+
+                // transmit paylod with delay
+                Task.Delay(10).ContinueWith(_ =>
+                {
+                    _serialPort?.Write(payload, 0, payload.Length);
+                });
+            }
+            else
+            {
+                throw new ArgumentException("Incorrect configuration requested");
+            }
+        }
+
         public void TriggerOnce()
         {
-            // TODO
+            byte[] header = AssembleHeader(102, 0, 0);
+            _serialPort?.Write(header, 0, header.Length);
         }
 
         public void ConfigureTriggerSettings(string triggerSetting)
         {
-            // TODO
+            byte[] header, payload;
+            AssembleTriggerSettingsCommand(triggerSetting, out header, out payload);
+
+            // transmit header
+            _serialPort?.Write(header, 0, header.Length);
+
+            // transmit paylod with delay
+            Task.Delay(10).ContinueWith(_ =>
+            {
+                _serialPort?.Write(payload, 0, payload.Length);
+            });
 
             CurrentTriggerMode = (TriggerModes)Enum.Parse(typeof(TriggerModes), triggerSetting);
+        }
+
+        #region Command Assembly Utilities
+        private void AssembleTriggerSettingsCommand(string setting, out byte[] cmdHeader, out byte[] cmdPayload)
+        {
+            byte[] header = AssembleHeader(101, 4, 0);
+            byte[] payload = new byte[4];
+
+            UInt32 triggerSettingNumber;
+            if (setting == "SINGLE")
+            {
+                triggerSettingNumber = 0;
+            }
+            else if (setting == "AUTO")
+            {
+                triggerSettingNumber = 1;
+            }
+            else // EXTERNAL TRIGGER
+            {
+                triggerSettingNumber = 2;
+            }
+
+            var p1 = BitConverter.GetBytes(triggerSettingNumber);
+
+            // puke
+            Array.Copy(p1, 0, payload, 0, 4);
+
+            cmdHeader = header;
+            cmdPayload = payload;
         }
 
         private void AssembleConfigurationCommand(double frequency, int shutter, out byte[] cmdHeader, out byte[] cmdPayload)
@@ -269,5 +307,6 @@ namespace AnaLight.Adapters
 
             return h;
         }
+        #endregion // Command Assembly Utilities
     }
 }
